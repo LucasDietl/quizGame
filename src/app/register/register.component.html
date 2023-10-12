@@ -1,0 +1,22 @@
+<div class="wrapper">
+    <h1 class="mat-title">Bienvenidos a SoleLu Wedding Game</h1>
+    <h2 class="mat-subheading">Identify Yourself</h2>
+    <form [formGroup]="registrationForm" class="example-form">
+      <mat-form-field class="example-full-width">
+        <mat-label>Nombre:</mat-label>
+        <input matInput formControlName="firstName" required>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Apellido:</mat-label>
+        <input matInput formControlName="lastName">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Apodo: (Lo que se va a mostrar)</mat-label>
+        <input matInput formControlName="nickname" required>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="saveUserInfo()" [disabled]="registrationForm.invalid">Save</button>
+    </form>
+  </div>
