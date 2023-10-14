@@ -3,6 +3,6 @@ import { UserState } from "./user/user.state";
 
 export interface AppState {
   dialog: DialogState;
-  user?: UserState;
+  user: UserState;
   // Add other state properties as needed
 }

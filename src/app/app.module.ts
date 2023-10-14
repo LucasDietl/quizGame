@@ -13,8 +13,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RegisterModule } from './register/register.module';
 import { rootReducers } from './store/reducers';
-import { DialogModule } from './dialog/dialog-store.module';
+import { DialogModule } from './dialog/dialog.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { UserModule } from './store/user/user-store.module';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     RegisterModule,
     MatDialogModule,
     DialogModule,
+    UserModule,
     FontAwesomeModule
   ],
   providers: [],

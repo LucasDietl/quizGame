@@ -7,6 +7,7 @@ import { AuthUser, User } from '../utils/user.interface';
 import { first } from 'rxjs/operators';
 import { FireStoreOperators } from '../utils/firestore.operators';
 import { DialogFacadeService } from '../store/dialog/dialog-facade.service';
+import { UserFacadeService } from '../store/user/user-facade.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class RegisterComponent implements OnInit {
   users: AuthUser[] = [];
   isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder, private firestore: Firestore, private dialogFacadeService: DialogFacadeService) {
+  constructor(private fb: FormBuilder, private firestore: Firestore, private dialogFacadeService: DialogFacadeService, private userFacadeService: UserFacadeService) {
     this.registrationForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       lastName: ['', [Validators.required,  Validators.minLength(3), Validators.maxLength(20)]],
@@ -52,6 +53,8 @@ export class RegisterComponent implements OnInit {
     if (!userDataInUse){
       addDoc(collectionInstance, user).then((data) => {
         console.log('Success', data);
+        debugger;
+        this.userFacadeService.saveUserData({...user, id: data.id})
         this.isLoading = false;
         formDirective.resetForm();
         this.registrationForm.reset();

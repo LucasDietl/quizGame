@@ -22,8 +22,9 @@
         </mat-form-field>
 
         <button *ngIf="!isLoading" mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Save</button>
-        <mat-spinner *ngIf="isLoading"></mat-spinner>
-
+        <div class="center">
+            <mat-spinner *ngIf="isLoading"></mat-spinner>
+        </div>
     </form>
 </div>
 <br>

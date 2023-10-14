@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, switchMap, tap, withLatestFrom, filter } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { DialogComponent } from 'src/app/dialog/dialog.component';
 import * as DialogActions from './dialog.actions';
 import { closeDialog } from './dialog.actions';
-import { selectIsDialogOpen } from './dialog.selectors';
 
 @Injectable()
 export class DialogEffects {

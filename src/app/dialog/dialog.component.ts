@@ -1,11 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { DialogFacadeService } from '../store/dialog/dialog-facade.service';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
-
-
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { Observable } from 'rxjs';
+import { DialogFacadeService } from '../store/dialog/dialog-facade.service';
 
 @Component({
   selector: 'app-dialog',
