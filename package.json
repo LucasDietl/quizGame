@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "startDev": "ng serve --configuration=development"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +22,14 @@
     "@angular/platform-browser": "~16.2.9",
     "@angular/platform-browser-dynamic": "~16.2.9",
     "@angular/router": "~16.2.9",
+    "@fortawesome/angular-fontawesome": "^0.13.0",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@ngrx/effects": "^16.3.0",
+    "@ngrx/entity": "^16.3.0",
+    "@ngrx/store": "^16.3.0",
+    "@ngrx/store-devtools": "^16.3.0",
+    "ngrx-store-localstorage": "^16.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.3"

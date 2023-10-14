@@ -1,22 +1,38 @@
+
 <div class="wrapper">
     <h1 class="mat-title">Bienvenidos a SoleLu Wedding Game</h1>
-    <h2 class="mat-subheading">Identify Yourself</h2>
-    <form [formGroup]="registrationForm" class="example-form">
-      <mat-form-field class="example-full-width">
-        <mat-label>Nombre:</mat-label>
-        <input matInput formControlName="firstName" required>
-      </mat-form-field>
+    <h2 class="mat-subheading">Anotate para pacticipar</h2>
+    <form [formGroup]="registrationForm" #formDirective="ngForm" (ngSubmit)="saveUserInfo(formDirective)">
+        <mat-form-field>
+            <mat-label>Nombre:</mat-label>
+            <input #firstName matInput formControlName="firstName" required>
+            <mat-hint align="end">{{firstName.value.length}}</mat-hint>
+        </mat-form-field>
 
-      <mat-form-field class="example-full-width">
-        <mat-label>Apellido:</mat-label>
-        <input matInput formControlName="lastName">
-      </mat-form-field>
+        <mat-form-field>
+            <mat-label>Apellido:</mat-label>
+            <input #lastName matInput formControlName="lastName" required >
+            <mat-hint align="end">{{lastName.value.length}}</mat-hint>
+        </mat-form-field>
 
-      <mat-form-field class="example-full-width">
-        <mat-label>Apodo: (Lo que se va a mostrar)</mat-label>
-        <input matInput formControlName="nickname" required>
-      </mat-form-field>
+        <mat-form-field hintLabel="(Lo que se va a mostrar)">
+            <mat-label>Apodo:</mat-label>
+            <input #nickName matInput formControlName="nickName" required >
+            <mat-error *ngIf="registrationForm.controls['nickName'].invalid">{{getErrorMessage('nickName')}}</mat-error>
+        </mat-form-field>
 
-      <button mat-raised-button color="primary" (click)="saveUserInfo()" [disabled]="registrationForm.invalid">Save</button>
+        <button *ngIf="!isLoading" mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Save</button>
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+
     </form>
-  </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div *ngFor="let user of users">
+    <div (click)="updateData(user.id)">{{user.firstName}} - {{user.lastName}}  ({{user.nickName}})</div>
+    <button (click)="deleteUser(user.id)">Delete user</button>
+</div>

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { DialogFacadeService } from './store/dialog/dialog-facade.service';
+import { tap, takeUntil } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { Subject } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -7,52 +11,20 @@ import { Firestore, collection, addDoc, collectionData, doc, updateDoc, deleteDo
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'quizGame';
-  users: {name: string, lastName: string, nickName: string, id: string}[] = [];
-  constructor(private firestore: Firestore) {
-
-  }
+  private destroy$ = new Subject<void>();
+  constructor(private dialogFacadeService: DialogFacadeService) { }
 
   ngOnInit(): void {
-    
-    this.getData();
-  }
-  
-  addUser() :void {
-    const collectionInstance = collection(this.firestore, 'users');
-    addDoc(collectionInstance, { name: 'Lucas', lastName: 'Dietl', nickName: 'Lucho' }).then((data) => {
-      console.log('Success', data);
-    }).catch((err) => {
-      console.error(err);
-    });
-  }
+    this.dialogFacadeService.dialogIsOpen().pipe(
+      takeUntil(this.destroy$),
+      tap((isOpen)=> {
+        if(isOpen){
+          this.dialogFacadeService.checkForOpenDialogs(true);
+        }
+        this.destroy$.next();
+        this.destroy$.complete();
+      }),
 
-  getData(): void {
-    const collectionInstance = collection(this.firestore, 'users');
-    collectionData(collectionInstance, {idField: 'id'}).subscribe((data)=> {
-      console.log(data);
-      debugger;
-      this.users = data as {name: string, lastName: string, nickName: string, id: string}[];
-    });
-  }
-
-  updateData(id: string): void {
-    const docInstance = doc(this.firestore, 'users', id);
-    const newData = {name: 'Lucas2'};
-
-    updateDoc(docInstance, newData).then(()=> {
-      console.log('Success update');
-    }).catch((err)=> {
-      console.error(err);
-    });
-  }
-
-  deleteUser(id: string): void {
-    const docInstance = doc(this.firestore, 'users', id);
-    deleteDoc(docInstance).then(()=> {
-      console.log('Delete Success');
-    }).catch((err)=> {
-      console.error(err);
-    });
+    ).subscribe();
   }
 }

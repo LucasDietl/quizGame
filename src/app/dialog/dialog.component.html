@@ -1,0 +1,7 @@
+<div class="dialog-wrapper">
+  <div class="close" (click)="close()"> <fa-icon [icon]="faTimesCircle" size="2x"></fa-icon> </div>
+  <h2 mat-dialog-title>{{ title$ | async }}</h2>
+  <div class="dialog-content">
+    <ng-container *ngTemplateOutlet="content$ | async"></ng-container>
+  </div>
+</div>
