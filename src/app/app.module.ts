@@ -5,22 +5,23 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CreateGameModule } from './create-game/create-game.module';
+import { DialogModule } from './dialog/dialog.module';
 import { RegisterModule } from './register/register.module';
 import { rootReducers } from './store/reducers';
-import { DialogModule } from './dialog/dialog.module';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { UserModule } from './store/user/user-store.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-  ],
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,

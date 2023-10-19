@@ -5,7 +5,8 @@ import * as UserActions from './user.actions';
 import * as UserSelectors from './user.selectors'
 import { AppState } from '../app.state';
 import { Observable } from 'rxjs';
-import { AuthUser } from 'src/app/utils/user.interface';
+import { AuthUser } from 'src/app/store/user/user.interface';
+import { UserState } from './user.state';
 
 
 @Injectable({
@@ -23,7 +24,4 @@ export class UserFacadeService {
     return this.store.select(UserSelectors.selectUserId);
   }
 
-  public user(): Observable<any> {
-    return this.store.select(UserSelectors.selectUser);
-  }
 }

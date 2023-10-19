@@ -4,14 +4,13 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { RegisterComponent } from './register.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DialogModule } from '@angular/cdk/dialog';
+import { JoinGameComponent } from './join-game.component';
+import { JoinGameRoutingModule } from './join-game-routing.module';
 
 @NgModule({
-  declarations: [
-    RegisterComponent,
-  ],
+  declarations: [JoinGameComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,8 +19,9 @@ import { DialogModule } from '@angular/cdk/dialog';
     MatInputModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
-    DialogModule
+    DialogModule,
+    JoinGameRoutingModule
   ],
-  exports: [RegisterComponent]
+  exports: [JoinGameComponent]
 })
-export class RegisterModule { }
+export class JoinGameModule { }

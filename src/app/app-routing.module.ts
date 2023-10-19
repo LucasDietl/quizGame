@@ -4,10 +4,17 @@ import { RegisterComponent } from './register/register.component';
 import { UserIdGuard } from './guards/user-id.guard';
 
 const routes: Routes = [
-  { path: 'register', component: RegisterComponent },
+  { path: '', component: RegisterComponent },
   {
-    path: '', component: RegisterComponent, canActivate: [UserIdGuard]
+    path: 'joinGame',
+    canActivate: [UserIdGuard],
+    loadChildren: () => import('./join-game/join-game.module').then(m => m.JoinGameModule)
   },
+  {
+    path: 'createGame',
+    canActivate: [UserIdGuard],
+    loadChildren: () => import('./create-game/create-game.module').then(m=>m.CreateGameModule)
+  }
 ];
 
 @NgModule({

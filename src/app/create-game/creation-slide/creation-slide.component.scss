@@ -1,0 +1,18 @@
+:host {
+    margin-bottom: 14px;
+    img.preview{
+        max-width: 100%;  
+    }
+    mat-card-title{
+        text-transform: capitalize;
+    }
+    mat-card-actions{
+        button {
+            margin-right: 3px;
+        }
+    }
+    mat-form-field{
+        width: 100%;
+    }
+
+}

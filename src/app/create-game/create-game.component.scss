@@ -1,0 +1,17 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h1, h2 {
+        text-align: center;
+    }
+    .slides-wrapper{
+        flex-direction: column;
+    }
+    .game-title{
+        width: 100%;
+    }
+    .slides-container{
+        margin-bottom: 24px;
+    }
+}

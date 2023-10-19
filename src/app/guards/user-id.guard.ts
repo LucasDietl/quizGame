@@ -13,7 +13,7 @@ export const UserIdGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state:
       if (userId) {
         return true;
       } else {
-        return router.createUrlTree(['/register']); // Replace with your login route
+        return router.createUrlTree(['/joinGame']);
       }
     })
   );

@@ -4,11 +4,6 @@ import { UserState } from './user.state';
 
 const selectUserState = createFeatureSelector<UserState>(userStateKey);
 
-export const selectUser = createSelector(
-  selectUserState,
-  (state) => state
-);
-
 export const selectFirstName = createSelector(
   selectUserState,
   (state) => state.firstName
