@@ -5,7 +5,7 @@ import { UserFacadeService } from '../store/user/user-facade.service';
 import { first, tap, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { CreateGameFacadeService } from '../store/create-game/create-game-facade.service';
-import { Game, SlideType, SlidesToCreate, SlidesToPlay } from '../store/create-game/create-game.state';
+import { Game, GameStatus, SlideType, SlidesToCreate, SlidesToPlay } from '../store/create-game/create-game.state';
 import { FormArray, FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -59,13 +59,18 @@ export class CreateGameComponent implements OnInit {
     const newGame = {
       title: 'New Game',
       slides: [],
-      ownerId: this.userId
+      ownerId: this.userId,
+      status: GameStatus.standBy
     };
     const collectionInstance = collection(this.firestore, collectionNames.games);
     addDoc(collectionInstance, newGame).then((data)=> {
       this.setGameById(data.id);
       console.log('creation success');
     });
+  }
+
+  public deleteGame(): void{
+    this.createGameFacadeService.deleteGame(this.selectedGame);
   }
 
   public addNewSlide(type: SlideType): void {

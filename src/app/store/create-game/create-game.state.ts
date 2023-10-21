@@ -8,6 +8,12 @@ export interface Game {
     title: string;
     slides: [];
     ownerId: string;
+    status: GameStatus;
+}
+export enum GameStatus {
+    standBy = 'standBy',
+    finished = 'finished',
+    inProgress = 'inProgress',
 }
 export enum SlideType {
     quiz = 'quiz',

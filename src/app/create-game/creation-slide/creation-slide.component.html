@@ -17,7 +17,7 @@
         <input matInput formControlName="title" placeholder="Slide Title">
       </mat-form-field>
       <ng-container *ngIf="screenSize$ | async as screenSize">
-        <mat-grid-list [cols]="screenSize === screenSizeNames.XSmall ? 1: 2" rowHeight="4:1" formArrayName="options">
+        <mat-grid-list [cols]="screenSize === screenSizeNames.XSmall || screenSize === screenSizeNames.Small ? 1 : 2" rowHeight="4:1" formArrayName="options">
           <ng-container *ngFor="let option of slideForm.get('options').controls; let j = index">
             <mat-grid-tile>
               <qz-creation-slide-option [option]="option"></qz-creation-slide-option>

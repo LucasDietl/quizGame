@@ -4,11 +4,13 @@
     <button *ngIf="!selectedGame" mat-raised-button color="secondary" type="button"(click)="createNewGame()">Create new</button>
     
 
-    <div class="center slides-wrapper" *ngIf="selectedGame as game">
+    <div class="center slides-wrapper container" *ngIf="selectedGame as game">
         <p *ngIf="game?.slides?.length === 0"> Add new slides to start </p>
         <button mat-raised-button color="primary" type="button"(click)="addNewSlide(slideType.quiz)">Add Quiz </button>
         <button mat-raised-button color="primary" type="button"(click)="addNewSlide(slideType.aOrB)">Add A/B </button>
         <button mat-raised-button color="primary" type="button"(click)="addNewSlide(slideType.results)">Add results</button>
+        <button mat-raised-button color="warn" type="button" (click)="deleteGame()">Delete Game</button>
+
         <form [formGroup]="gameForm" (ngSubmit)="onSubmit()">
             <mat-form-field class="game-title">
                 <mat-label>Game Title</mat-label>

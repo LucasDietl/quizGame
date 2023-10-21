@@ -53,8 +53,8 @@ export class CreateGameFacadeService {
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const games: Game[] = [];
         querySnapshot.forEach((doc) => {
-          const { title, ownerId, slides } = doc.data();
-          const game = { id: doc.id, title, ownerId, slides };
+          const { title, ownerId, slides, status } = doc.data();
+          const game = { id: doc.id, title, ownerId, slides, status };
           games.push(game);
         });
         observer.next(games);
@@ -105,6 +105,21 @@ export class CreateGameFacadeService {
     });
   }
 
+  public deleteGame(game: Game): void {
+    const batch = writeBatch(this.firestore);
+    game.slides.forEach((slideId: string) => {
+      const slideInstance = doc(this.firestore, collectionNames.slides, slideId);
+      deleteDoc(slideInstance);
+    });
+    batch.commit()
+    .then(()=> {
+      const gameInstance = doc(this.firestore, collectionNames.games, game.id);
+      deleteDoc(gameInstance);
+    }).catch(err=> {
+      console.error(err)
+    });
+  }
+
   public deleteSlide(slideId: string, gameId:string): void {
     const slideInstance = doc(this.firestore, collectionNames.slides, slideId);
     deleteDoc(slideInstance).then(() => {
@@ -117,7 +132,7 @@ export class CreateGameFacadeService {
     updateDoc(gameInstance, {
       slides: arrayRemove(slideId)
     }).then((data) => {
-      console.log('Success to add slide ID to game slides array', data);
+      console.log('Success removal of slide ID to game slides array', data);
     }).catch(err => {
       console.error(err);
     });
@@ -143,14 +158,5 @@ export class CreateGameFacadeService {
       setDoc(slideInstance, slideNew, { merge: true });
     });
     batch.commit();
-    // slides.forEach((slide)=> {
-    //   const slideInstance = doc(this.firestore, collectionNames.slides, slide.id);
-    //     const slideNew: Partial<SlidesToCreate> = {options: slide.options, title: slide.title, imageUrl: slide.imageUrl};
-    //     updateDoc(slideInstance, slideNew).then((data)=> {
-    //       console.log('Success to add slide ID to game slides array', data);
-    //     }).catch(err=>{
-    //       console.error(err);
-    //     });
-    // });
   }
 }
