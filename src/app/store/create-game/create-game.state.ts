@@ -6,9 +6,11 @@ export interface CreateGameState {
 export interface Game {
     id: string;
     title: string;
-    slides: [];
+    slides: string[];
     ownerId: string;
     status: GameStatus;
+    answers: string[];
+    currentSlide: string;
 }
 export enum GameStatus {
     standBy = 'standBy',

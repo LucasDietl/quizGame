@@ -1,16 +1,20 @@
-<div class="wrapper">
+<div class="wrapper container">
     <h1 class="mat-title">Join or create a new game</h1>
     <!-- <h2 class="mat-subheading">Anotate para pacticipar</h2> -->
     <form [formGroup]="joinGameForm" #formDirective="ngForm" (ngSubmit)="joinGame(formDirective)">
         <mat-form-field>
             <mat-label>Game ID:</mat-label>
-            <input placeholder="Game Id" #join matInput formControlName="join" required>
+            <input placeholder="Game Id" #join matInput formControlName="gameId" required>
         </mat-form-field>
 
-        <button *ngIf="!isLoading" mat-raised-button color="primary" type="submit" [disabled]="joinGameForm.invalid || isLoading">Join</button>
-        <button *ngIf="!isLoading" mat-raised-button color="secondary" type="button" [disabled]="isLoading" (click)="createNewGame()">Create new</button>
+    <ng-container *ngIf="isLoading$ | async; else elseBlock">
         <div class="center">
-            <mat-spinner *ngIf="isLoading"></mat-spinner>
+            <mat-spinner></mat-spinner>
         </div>
+    </ng-container>
+    <ng-template #elseBlock>
+        <button  mat-raised-button color="primary" type="submit" [disabled]="joinGameForm.invalid">Join</button>
+    </ng-template>
+    <button  mat-raised-button color="secondary" type="button" [disabled]="" (click)="createNewGame()">Create new ADMIN</button>
     </form>
 </div>

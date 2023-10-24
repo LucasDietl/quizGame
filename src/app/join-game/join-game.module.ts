@@ -8,6 +8,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DialogModule } from '@angular/cdk/dialog';
 import { JoinGameComponent } from './join-game.component';
 import { JoinGameRoutingModule } from './join-game-routing.module';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { joinGameReducer, joinGameStateConfig, joinGameStateKey } from '../store/join-game/join-game.reducer';
+import { JoinGameEffects } from '../store/join-game/join-game.effects';
 
 @NgModule({
   declarations: [JoinGameComponent],
@@ -20,7 +24,9 @@ import { JoinGameRoutingModule } from './join-game-routing.module';
     MatFormFieldModule,
     MatProgressSpinnerModule,
     DialogModule,
-    JoinGameRoutingModule
+    JoinGameRoutingModule,
+    StoreModule.forFeature(joinGameStateKey, joinGameReducer, joinGameStateConfig),
+    EffectsModule.forFeature([JoinGameEffects]),
   ],
   exports: [JoinGameComponent]
 })

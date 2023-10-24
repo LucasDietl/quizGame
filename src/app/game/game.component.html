@@ -1,0 +1,32 @@
+<ng-container *ngIf="user$ | async as user">
+    <ng-container *ngIf="game$ | async as game">
+        Hola: {{user.nickName}} bienvenidos a {{ game.title }}
+        <div [ngSwitch]="game.status">
+            <div *ngSwitchCase="gameStatus.standBy">
+          
+            </div>
+            <div *ngSwitchCase="gameStatus.inProgress">
+                <ng-container *ngIf="currentSlide$ | async as currentSlide">
+                    {{ currentSlide.title }}
+                    <img class="preview" *ngIf="currentSlide.imageUrl" mat-card-image [src]="currentSlide.imageUrl" alt="">
+                    <ng-container *ngFor="let option of currentSlide.options">
+
+                        <button mat-raised-button color="primary" type="button">{{option.title}}</button>
+                    </ng-container>
+                    
+                </ng-container>
+            </div>
+            <div *ngSwitchCase="gameStatus.finished">
+          
+            </div>
+        </div>
+        <div *ngIf="user?.id === game.ownerId">
+            <button *ngIf="game.status === gameStatus.standBy" mat-raised-button color="primary" type="button"(click)="startGame()">Start game </button>
+            <button *ngIf="game.status === gameStatus.inProgress" mat-raised-button color="primary" type="button"(click)="setNextSlide()">Next slide </button>
+
+        </div>
+        <br>
+    </ng-container>
+</ng-container>
+
+<!-- <router-outlet></router-outlet> -->

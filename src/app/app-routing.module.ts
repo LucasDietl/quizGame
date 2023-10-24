@@ -14,6 +14,11 @@ const routes: Routes = [
     path: 'createGame',
     canActivate: [UserIdGuard],
     loadChildren: () => import('./create-game/create-game.module').then(m=>m.CreateGameModule)
+  },
+  {
+    path: 'game/:id',
+    canActivate: [UserIdGuard],
+    loadChildren: () => import('./game/game.module').then(m=>m.GameModule)
   }
 ];
 

@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
-import { collectionNames } from '../utils/helpers/collection-names';
-import { UserFacadeService } from '../store/user/user-facade.service';
-import { first, tap, map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
+import { DestroyableComponent } from '../utils/destroyable/destroyable.component';
 import { CreateGameFacadeService } from '../store/create-game/create-game-facade.service';
 import { Game, GameStatus, SlideType, SlidesToCreate, SlidesToPlay } from '../store/create-game/create-game.state';
-import { FormArray, FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
+import { UserFacadeService } from '../store/user/user-facade.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-create-game',
+  selector: 'qz-create-game',
   templateUrl: './create-game.component.html',
   styleUrls: ['./create-game.component.scss']
 })
-export class CreateGameComponent implements OnInit {
+export class CreateGameComponent extends DestroyableComponent implements OnInit {
   public gameForm: FormGroup;
   public slides!: FormArray;
   private userId: string = '';
@@ -22,7 +22,8 @@ export class CreateGameComponent implements OnInit {
   public gameTitle: FormControl = new FormControl();
   public slideType = SlideType;
 
-  constructor(private formBuilder: FormBuilder, private firestore: Firestore, private userFacadeService: UserFacadeService, private createGameFacadeService: CreateGameFacadeService) {
+  constructor(private formBuilder: FormBuilder, private userFacadeService: UserFacadeService, private createGameFacadeService: CreateGameFacadeService, private router: Router) {
+    super();
     this.gameForm = this.formBuilder.group({
       title: '',
       slides: this.formBuilder.array<any>([]),
@@ -37,15 +38,20 @@ export class CreateGameComponent implements OnInit {
 
   }
 
-  getSlides(): FormArray {
-    return this.gameForm.get('slides') as FormArray;
-  }
-
+  
   ngOnInit(): void {
     this.userFacadeService.userId().subscribe((userId => {
       this.userId = userId;
     }));
     this.createGameFacadeService.getOwnedGames();
+  }
+
+  public getSlides(): FormArray {
+    return this.gameForm.get('slides') as FormArray;
+  }
+
+  public goToGame(): void{
+    this.router.navigate(['/game', this.selectedGame.id]);
   }
 
   public onSubmit(): void {
@@ -55,18 +61,17 @@ export class CreateGameComponent implements OnInit {
 
   }
 
-  public createNewGame(): void {
+  public async createNewGame(): Promise<void> {
     const newGame = {
       title: 'New Game',
       slides: [],
       ownerId: this.userId,
-      status: GameStatus.standBy
+      status: GameStatus.standBy,
+      answers: [],
+      currentSlide: '',
     };
-    const collectionInstance = collection(this.firestore, collectionNames.games);
-    addDoc(collectionInstance, newGame).then((data)=> {
-      this.setGameById(data.id);
-      console.log('creation success');
-    });
+    const id = await this.createGameFacadeService.createGame(newGame);
+    this.setGameById(id);
   }
 
   public deleteGame(): void{
@@ -103,7 +108,7 @@ export class CreateGameComponent implements OnInit {
   }
 
   public setGameById(id: string): void {
-    this.createGameFacadeService.selectedCurrentGameToCreate(id).subscribe((game: Game) => {
+    this.createGameFacadeService.selectedCurrentGameToCreate(id).pipe(takeUntil(this.destroyed$)).subscribe((game: Game) => {
       console.log('Setting game with subscription');
       this.selectedGame = game;
       this.gameForm.patchValue(game);

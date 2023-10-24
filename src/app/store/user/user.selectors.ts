@@ -14,9 +14,14 @@ export const selectLastName = createSelector(
   (state) => state.lastName
 );
 
-export const selectNickNameContent = createSelector(
+export const selectNickName = createSelector(
   selectUserState,
   (state) => state.nickName
+);
+
+export const selectUserData = createSelector(
+  selectUserState,
+  (state) => state
 );
 
 export const selectUserId = createSelector(

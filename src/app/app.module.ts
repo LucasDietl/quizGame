@@ -12,7 +12,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CreateGameModule } from './create-game/create-game.module';
 import { DialogModule } from './dialog/dialog.module';
 import { RegisterModule } from './register/register.module';
 import { rootReducers } from './store/reducers';
@@ -48,7 +47,7 @@ import { UserModule } from './store/user/user-store.module';
     MatDialogModule,
     DialogModule,
     UserModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

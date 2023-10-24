@@ -1,5 +1,6 @@
 export enum collectionNames {
     users = 'users',
     games = 'games',
-    slides = 'slides'
+    slides = 'slides',
+    answers = 'answers',
 }

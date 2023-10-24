@@ -10,6 +10,8 @@
         <button mat-raised-button color="primary" type="button"(click)="addNewSlide(slideType.aOrB)">Add A/B </button>
         <button mat-raised-button color="primary" type="button"(click)="addNewSlide(slideType.results)">Add results</button>
         <button mat-raised-button color="warn" type="button" (click)="deleteGame()">Delete Game</button>
+        <button mat-raised-button color="secondary" type="button" (click)="goToGame()">Start Game</button>
+
 
         <form [formGroup]="gameForm" (ngSubmit)="onSubmit()">
             <mat-form-field class="game-title">
