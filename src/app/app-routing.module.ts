@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
 import { UserIdGuard } from './guards/user-id.guard';
+import { GameGuard } from './guards/game.guard';
 
 const routes: Routes = [
   { path: '', component: RegisterComponent },
@@ -17,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'game/:id',
-    canActivate: [UserIdGuard],
+    canActivate: [UserIdGuard, GameGuard],
     loadChildren: () => import('./game/game.module').then(m=>m.GameModule)
   }
 ];

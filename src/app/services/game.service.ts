@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Firestore, addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, query, updateDoc, where, writeBatch } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, query, updateDoc, where, writeBatch } from '@angular/fire/firestore';
 import { collectionNames } from 'src/app/utils/helpers/collection-names';
 import { Game, GameStatus, SlidesToPlay } from '../store/create-game/create-game.state';
 import { Observable } from 'rxjs';
 import { FireStoreOperators } from '../utils/helpers/firestore.operators';
+import { Answers } from '../store/game/game.state';
 
 
 
@@ -52,7 +53,6 @@ export class GameService {
   public async createGame(game: Partial<Game>): Promise<string> {
     const collectionInstance = collection(this.firestore, collectionNames.games);
     const data = await addDoc(collectionInstance, game);
-    console.log('Game creation success', data?.id);
     return data.id;
   }
 
@@ -85,7 +85,6 @@ export class GameService {
   public changeGameStatusCall(gameStatus: GameStatus, gameId: string): Promise<void> {
     const docInstance = doc(this.firestore, collectionNames.games, gameId);
     const newStatus: Partial<Game> = { status: gameStatus };
-
     return updateDoc(docInstance, newStatus);
   }
 
@@ -105,9 +104,26 @@ export class GameService {
     return updateDoc(docInstance, currentSlideUpdate);
   }
 
-  public setAnswer(): void{
-    const answerCollectionInstance = collection(this.firestore, collectionNames.answers);
+  public setUserAnswer(answerId: string, points: number): Promise<void> {
+    const answerDocInstance = doc(this.firestore, collectionNames.answers, answerId);
+    return updateDoc(answerDocInstance, {points: increment(points)})
   }
 
+  public async gameIdExists(gameId: string): Promise<boolean> {
+    const gameDocInstance = doc(this.firestore, collectionNames.games, gameId);
+    const game = await getDoc(gameDocInstance);
+    return game.exists();
+  }
+
+  public async userAnswerCheck(gameId: string, userId: string): Promise<Answers[]> {
+    const answersInstance = collection(this.firestore, collectionNames.answers);
+    const q = query(answersInstance, where('gameId', FireStoreOperators.EQ, gameId), where('userId', FireStoreOperators.EQ, userId));
+    const querySnapShot = await getDocs(q);
+    const isRegister: Answers[] = [];
+    querySnapShot.forEach((doc)=> {
+      isRegister.push(doc.data() as Answers);
+    })
+    return isRegister;
+  }
   
 }

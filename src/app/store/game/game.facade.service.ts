@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AppState } from '../app.state';
 import { Game, GameStatus, SlidesToPlay } from '../create-game/create-game.state';
 import * as CreateGameActions from './game.actions';
-import { selectCurrentSlide, selectCurrentSlideId, selectGame, selectSlides } from './game.selectors';
+import { selectCurrentSlide, selectCurrentSlideId, selectDisabledAnswers, selectGame, selectSlides } from './game.selectors';
 import * as GameActions from './game.actions';
 
 
@@ -31,6 +31,10 @@ export class GameFacadeService {
     return this.store.select(selectGame);
   }
 
+  public selectDisabledAnswers(): Observable<boolean> {
+    return this.store.select(selectDisabledAnswers)
+  }
+
   public selectGameSlides(): Observable<SlidesToPlay[]> {
     return this.store.select(selectSlides);
   }
@@ -42,11 +46,6 @@ export class GameFacadeService {
   public getCurrentSlide(): Observable<SlidesToPlay | undefined> {
     return this.store.select(selectCurrentSlide);
   }
-
-  // public getNextSlideId(): Observable<string> {
-  //   return this.store.select(selectNextSlideId)
-  // }
-
 
 
 }

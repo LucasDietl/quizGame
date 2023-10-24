@@ -5,6 +5,7 @@ import { collectionNames } from 'src/app/utils/helpers/collection-names';
 import { FireStoreOperators } from 'src/app/utils/helpers/firestore.operators';
 import { SlideType, SlidesToCreate, SlidesToPlay } from '../store/create-game/create-game.state';
 import { AuthUser } from '../store/user/user.interface';
+import { Answers } from '../store/game/game.state';
 
 
 @Injectable({
@@ -18,7 +19,6 @@ export class JoinGameService {
         const docInstance = doc(this.firestore, collectionNames.games, gameId);
         const data = await getDoc(docInstance);
         const exists = data.exists();
-        debugger
         if (exists) {
             return exists;
         }
@@ -27,7 +27,7 @@ export class JoinGameService {
 
     public initiateAnswers(gameId: string, userId: AuthUser['id']): Promise<DocumentReference<DocumentData>> {
         const collectionInstance = collection(this.firestore, collectionNames.answers);
-        const participant = {
+        const participant: Answers = {
             totalPoints: 0,
             previousTotalPoints: 0,
             gameId,

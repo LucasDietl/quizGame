@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { DialogFacadeService } from '../store/dialog/dialog-facade.service';
 
 @Component({
-  selector: 'app-dialog',
+  selector: 'qz-dialog',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
 })

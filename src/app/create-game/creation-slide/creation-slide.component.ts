@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { screenSizeNames } from 'src/app/utils/helpers/screen-size-names';
 
 @Component({
-  selector: 'app-creation-slide',
+  selector: 'qz-creation-slide',
   templateUrl: './creation-slide.component.html',
   styleUrls: ['./creation-slide.component.scss']
 })

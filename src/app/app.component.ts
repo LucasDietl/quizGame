@@ -6,7 +6,7 @@ import { CommonFacadeService } from './store/common/common-facade.service';
 import { DialogFacadeService } from './store/dialog/dialog-facade.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'qz-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

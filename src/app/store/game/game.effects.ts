@@ -18,7 +18,7 @@ export class GameEffects {
             switchMap(({ gameId }) => {
                 return from(this.gameService.getGameByIdCall(gameId)).pipe(
                     mergeMap((game) => [GameActions.getCurrentGameByIdSuccess({ game }), GameActions.getSlides({ gameId })]),
-                    catchError((error) => of(openDialog({ title: 'Error Getting game by ID', content: JSON.stringify(error) })))
+                    catchError((error) => of(openDialog({ title: 'Error Getting game by ID' })))
                 )
             }),
         )
@@ -30,7 +30,7 @@ export class GameEffects {
             switchMap(({gameId}) => {
                 return this.slidesService.getSlidesByGamesIdCall(gameId).pipe(
                     map((slides) => GameActions.getSlidesSuccess({ slides })),
-                    catchError((error) => of(openDialog({ title: 'Error Getting slides by game ID', content: JSON.stringify(error) })))
+                    catchError((error) => of(openDialog({ title: 'Error Getting slides by game ID' })))
                 );
             }),
         )
@@ -42,7 +42,7 @@ export class GameEffects {
             switchMap(({ gameStatus, gameId }) => {
                 return from(this.gameService.changeGameStatusCall(gameStatus, gameId)).pipe(
                     map(() => GameActions.changeGameStatusSuccess({gameStatus, gameId})),
-                    catchError((error) => of(openDialog({ title: 'Error changing game status', content: JSON.stringify(error) })))
+                    catchError((error) => of(openDialog({ title: 'Error changing game status' })))
                 );
             }),
         )
@@ -62,19 +62,17 @@ export class GameEffects {
         )
     );
 
-    // setNextSlide$ = createEffect(() =>
+    // setUserAnswer$ = createEffect(() =>
     //     this.actions$.pipe(
-    //         ofType(GameActions.setNextSlideId),
-    //         withLatestFrom(this.gameFacadeService.getNextSlideId()),
-    //         switchMap(([{
-    //             gameId,
-    //         }, nextSlideId]) => {
-    //             const slideId = this.gameService.getNextSlideId(game!, slides);
-    //             return from(this.gameService.setCurrentSlide(nextSlideId, gameId)).pipe(
+    //         ofType(GameActions.setUserAnswer),
+    //         switchMap(({answerId, points}) => {
+    //             const slideId = this.gameService.setUserAnswer(answerId, slides);
+    //             return from(this.gameService.setCurrentSlide(game!.id, slideId)).pipe(
     //                 map(() => GameActions.setNextSlideIdSuccess()),
     //                 catchError((error) => of(openDialog({ title: 'Error changing game status', content: JSON.stringify(error) })))
     //             );
     //         }),
     //     )
     // );
+
 }

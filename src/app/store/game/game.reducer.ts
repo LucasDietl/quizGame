@@ -8,7 +8,8 @@ export const initialGameState: GameState = {
   game: null,
   loading: false,
   slides: [],
-  answers: []
+  answers: [],
+  disableAnswers: false,
 };
 
 
@@ -21,6 +22,11 @@ export const gameReducer = createReducer(
   on(GameActions.getSlidesSuccess, (state, { slides }) => ({
     ...state,
     slides,
+    disableAnswers: false
+  })),
+  on(GameActions.setUserAnswer, (state) => ({
+    ...state,
+    disableAnswers: true,
   })),
 );
 

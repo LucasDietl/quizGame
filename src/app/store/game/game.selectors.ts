@@ -14,7 +14,6 @@ export const selectSlides = createSelector(
   (state) => state.slides
 );
 
-
 export const selectCurrentSlideId = createSelector(
   selectGame,
   (state) => state?.currentSlide ?? ''
@@ -26,13 +25,7 @@ export const selectCurrentSlide = createSelector(
   (slides, currentSlideId) => slides.find((slide) => slide?.id === currentSlideId)
 );
 
-// export const selectNextSlideId = createSelector(selectSlides, selectCurrentSlideId, (slides, currentSlideId) => {
-//   debugger;
-//   const slideIndex = slides.findIndex(slide => slide.id === currentSlideId);
-//   const slideId = slides.find((slide) => { 
-//       const order = slideIndex >= 0 ? slide.order +1 : 0
-//     return slide.order === order;
-//   });
-//   return slideId?.id ?? '';
-// });
-
+export const selectDisabledAnswers = createSelector(
+  selectGameState,
+  (state) => state.disableAnswers
+);

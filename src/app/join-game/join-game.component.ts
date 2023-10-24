@@ -11,7 +11,7 @@ import { JoinGameFacadeService } from '../store/join-game/join-game.facade.servi
 import { JoinGameService } from '../services/join-game.service';
 
 @Component({
-  selector: 'app-join-game',
+  selector: 'qz-join-game',
   templateUrl: './join-game.component.html',
   styleUrls: ['./join-game.component.scss']
 })

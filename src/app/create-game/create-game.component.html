@@ -21,7 +21,7 @@
             
             <div formArrayName="slides">
                 <div *ngFor="let slide of getSlides().controls; let i = index" [formGroupName]="i" class="slides-container">
-                    <app-creation-slide (deleteSlide)="deleteSlide($event, i)" [slideForm]="slide" [index]="i" ></app-creation-slide>
+                    <qz-creation-slide (deleteSlide)="deleteSlide($event, i)" [slideForm]="slide" [index]="i" ></qz-creation-slide>
                 </div>
             </div>
         

@@ -5,4 +5,12 @@ export interface GameState {
     loading: boolean;
     slides: SlidesToPlay[];
     answers: [];
+    disableAnswers: boolean;
+}
+
+export interface Answers {
+    userId: string;
+    gameId: string;
+    totalPoints: number;
+    previousTotalPoints: number;
 }

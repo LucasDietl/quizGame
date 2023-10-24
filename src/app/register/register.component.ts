@@ -11,7 +11,7 @@ import { first }from 'rxjs/operators'
 
 
 @Component({
-  selector: 'app-register',
+  selector: 'qz-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
