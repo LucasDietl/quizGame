@@ -1,0 +1,49 @@
+:host{
+    display: block;
+    height: 100vh;
+    overflow-y: scroll;
+    background-image: url("/assets/images/disneyPattern.jpeg");
+    background-size: contain;
+    background-repeat: repeat;
+
+    // background-color: #0F4D84;
+    // background-image:
+    // repeating-linear-gradient(120deg, rgba(255,255,255,.1), transparent 1px, transparent 10000px),
+    // repeating-linear-gradient(60deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 1px, transparent 1px, transparent 10000px),
+    // linear-gradient(60deg,rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1)),
+    // linear-gradient(120deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1));
+    // background-size: 180px 305px;
+    .game-wrapper{
+        margin: 0 auto;
+    }
+    .quiz-wrapper{
+        position: relative;
+        .timer{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .preview{
+        max-width: 500px;
+        margin-bottom: 16px;
+        img {
+            border-radius: 16px;
+            max-width: 100%;
+        }
+    }
+    
+
+    .options-wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+}
+
+

@@ -14,7 +14,6 @@ export const GameGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
         let answerPresent: boolean = false;
         let gameExists: boolean = false;
         const answersPresent = await gameService.userAnswerCheck(gameId, userId);
-        debugger;
         if(answersPresent.length !== 0){
             answerPresent = true;
         }

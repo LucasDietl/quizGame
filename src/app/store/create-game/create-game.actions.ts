@@ -6,3 +6,4 @@ export const getCurrentGameOwnedSuccess = createAction('[Create Game] Get curren
 
 export const getSlidesByGameId = createAction('[Create Game] Get slides by game id', props<{id: string}>());
 export const getSlidesByGameIdSuccess = createAction('[Create Game] Get slides by game id Success', props<{slides: SlidesToPlay[]}>());
+

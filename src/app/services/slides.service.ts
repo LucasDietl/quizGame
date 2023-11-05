@@ -1,7 +1,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Firestore, addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from '@angular/fire/firestore';
+import { Firestore, addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDocs, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { collectionNames } from 'src/app/utils/helpers/collection-names';
 import { FireStoreOperators } from 'src/app/utils/helpers/firestore.operators';
@@ -39,6 +39,24 @@ public getSlidesByGamesIdCall(gameId: string): Observable<SlidesToPlay[]> {
         unsubscribe();
       };
     });
+  }
+
+  public async getSlidesOnceByGamesIdCall(gameId: string): Promise<SlidesToPlay[]> {
+    const collectionInstance = collection(this.firestore, collectionNames.slides);
+    const q = query(collectionInstance, where('gameId', FireStoreOperators.EQ, gameId));
+
+    const querySnapshot = await getDocs(q);
+    const slides: SlidesToPlay[] = [];
+    querySnapshot.forEach((doc) => {
+      const { title, type, order, gameId } = doc.data();
+          let slide: SlidesToPlay = { id: doc.id, gameId, title, type, order };
+          if (type === SlideType.quiz || type === SlideType.aOrB) {
+            const { options, imageUrl, points, seconds } = doc.data();
+            slide = { ...slide, options, imageUrl, points, seconds};
+          }
+          slides[slide?.order || 0] = slide;
+    });
+    return slides;
   }
 
   public addNewSlide(gameId: string, newSlide: SlidesToCreate): void {

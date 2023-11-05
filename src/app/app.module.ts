@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { MatDialogModule } from '@angular/material/dialog';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -23,6 +23,7 @@ import { UserModule } from './store/user/user-store.module';
     ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
@@ -42,7 +43,6 @@ import { UserModule } from './store/user/user-store.module';
       maxAge: 25, // Specify a limit for the number of actions to store
       logOnly: environment.production, // Set to true for production
     }),
-    BrowserAnimationsModule,
     RegisterModule,
     MatDialogModule,
     DialogModule,

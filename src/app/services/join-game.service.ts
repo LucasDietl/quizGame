@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentData, DocumentReference, Firestore, addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from '@angular/fire/firestore';
+import { DocumentData, DocumentReference, Firestore, addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, writeBatch } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { collectionNames } from 'src/app/utils/helpers/collection-names';
 import { FireStoreOperators } from 'src/app/utils/helpers/firestore.operators';
@@ -25,14 +25,18 @@ export class JoinGameService {
         throw new Error('No Id found.');
     }
 
-    public initiateAnswers(gameId: string, userId: AuthUser['id']): Promise<DocumentReference<DocumentData>> {
+    public initiateAnswers(gameId: string, user: AuthUser): Promise<DocumentReference<DocumentData>> {
         const collectionInstance = collection(this.firestore, collectionNames.answers);
         const participant: Answers = {
             totalPoints: 0,
             previousTotalPoints: 0,
             gameId,
-            userId
-        }
-        return addDoc(collectionInstance, participant); 
+            userId: user.id,
+            slideId: '',
+            nickName: user.nickName,
+            joinedTimeStamp: 0,
+        };
+        const newParticipant = { ...participant, joinedTimeStamp: serverTimestamp()}
+        return addDoc(collectionInstance, newParticipant); 
     }
 }

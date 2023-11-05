@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { GameService } from 'src/app/services/game.service';
 import { SlidesService } from 'src/app/services/slides.service';
 import { UserFacadeService } from '../user/user-facade.service';
 import * as CreateGameActions from './create-game.actions';
+import { openDialog } from '../dialog/dialog.actions';
+import { from, of } from 'rxjs';
 
 @Injectable()
 export class CreateGameEffects {
@@ -14,21 +16,26 @@ export class CreateGameEffects {
         this.actions$.pipe(
             ofType(CreateGameActions.getCurrentGamesOwned),
             withLatestFrom(this.userFacadeService.userId()),
-            mergeMap(([_, userId]) => {
-                return this.gameService.getOwnedGamesCall(userId);
+            switchMap(([_, userId]) => {
+                return this.gameService.getOwnedGamesCall(userId).pipe(
+                    map((games) => CreateGameActions.getCurrentGameOwnedSuccess({ games })),
+                    catchError((_) => of(openDialog({ title: 'Error getting Owned games' })))
+
+                )
             }),
-            map((games) => CreateGameActions.getCurrentGameOwnedSuccess({ games }))
         )
     );
 
     getSlidesByGameId$ = createEffect(() =>
-    this.actions$.pipe(
-        ofType(CreateGameActions.getSlidesByGameId),
-        mergeMap(({id}) => {
-            return this.slidesService.getSlidesByGamesIdCall(id);
-        }),
-        map((slides) => CreateGameActions.getSlidesByGameIdSuccess({ slides })),
-    )
-);
+        this.actions$.pipe(
+            ofType(CreateGameActions.getSlidesByGameId),
+            switchMap(({ id }) => {
+                return this.slidesService.getSlidesByGamesIdCall(id).pipe(
+                    map((slides) => CreateGameActions.getSlidesByGameIdSuccess({ slides })),
+                    catchError((_) => of(openDialog({ title: 'Error getting slides for game' })))
+                );
+            }),
+        )
+    );
 
 }

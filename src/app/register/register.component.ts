@@ -58,8 +58,6 @@ export class RegisterComponent implements OnInit {
     const querySnapshot = await getDocs(q);
     let userDataInUse = false;
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      // console.log(doc.id, " => ", doc.data());
       userDataInUse = doc.exists();
     });
     if (!userDataInUse) {

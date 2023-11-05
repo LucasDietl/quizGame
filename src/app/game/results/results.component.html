@@ -1,0 +1,29 @@
+<h2 class="shadow-text title"> 
+    {{title}}
+</h2>
+<div class="you shadow-text">
+    Tus puntos: <span class="points">{{userAnswer.totalPoints}}</span>
+</div>
+
+<div class="shadow-text ranking-list">
+    <div  *ngFor="let answer of allUsersAnswers; index as i; trackBy:trackBy" class="ranking-item">
+        <ng-container *ngIf="i < 20">
+            <div class="position">
+                <span *ngIf="i === 0">
+                    <fa-icon [icon]="faTrophy"></fa-icon>
+                </span>
+                <span *ngIf="i === 1">
+                    <fa-icon class="second" [icon]="faMedal"></fa-icon>
+                </span>
+                <span *ngIf="i === 2">
+                    <fa-icon class="third" [icon]="faMedal"></fa-icon>
+                </span>
+                <span *ngIf="i > 2">
+                    {{ i + 1 }}
+                </span>
+            </div>
+            <div class="name">{{ answer.nickName }}</div>
+            <div class="points">{{ answer.totalPoints }}</div>
+        </ng-container>
+    </div>
+</div>

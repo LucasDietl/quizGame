@@ -1,0 +1,57 @@
+:host {
+    .title{
+        font-size: 30px;
+        line-height: 30px;
+    }
+    .you{
+        font-size: 20px;
+        line-height: 20px;
+        margin-bottom: 16px;
+        .points{
+            font-size: 40px;
+            line-height: 40px;
+        }
+    }
+
+    .ranking-list {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .ranking-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 8px;
+        fa-icon{
+            color: gold;
+            margin-right: 8px;
+            &.second{
+                color: silver;
+            }
+            &.third{
+                color: #977547;
+            }
+        }
+      }
+      
+      .position {
+        width: 3rem;
+        text-align: center;
+      }
+      
+      .name {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .points {
+        width: 4rem;
+        text-align: center;
+      }
+}

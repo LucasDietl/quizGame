@@ -1,0 +1,5 @@
+<button *ngIf="game.status === gameStatus.standBy" mat-raised-button color="primary" type="button"(click)="startGame()">Start game </button>
+<ng-container *ngIf="lastSlideId !== currentSlideId">
+    <button *ngIf="game.status === gameStatus.inProgress" mat-raised-button color="primary" type="button"(click)="setNextSlide()">Next slide </button>
+</ng-container>
+<button *ngIf="lastSlideId === currentSlideId" mat-raised-button color="primary" type="button"(click)="finishGame()">Next slide </button>

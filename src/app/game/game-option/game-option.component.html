@@ -1,0 +1,18 @@
+<div (click)="optionSelected()" 
+    class="layer1" 
+    [class.red]="color === 'red'"
+    [class.blue]="color === 'blue'"  
+    [class.yellow]="color === 'yellow'" 
+    [class.green]="color === 'green'"
+    [class.disabled]="isDisabled"
+    >
+    
+    <div class="text">{{text}}</div>
+        <div class="layer2" >
+            <div class="layer3" >
+                <div class="layer4" >
+                    <div class="layer5"></div>
+                </div>
+            </div>
+        </div>
+</div>

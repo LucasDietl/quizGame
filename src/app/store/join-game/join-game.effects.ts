@@ -34,9 +34,9 @@ export class JoinGameEffects {
     InitiateUser$ = createEffect(() =>
         this.actions$.pipe(
             ofType(JoinGameActions.joinGameSuccess),
-            withLatestFrom(this.userFacadeService.userId()),
-            switchMap(([{ gameId }, userId]) => {
-                return from(this.joinGameService.initiateAnswers(gameId, userId)).pipe(
+            withLatestFrom(this.userFacadeService.userData()),
+            switchMap(([{ gameId }, user]) => {
+                return from(this.joinGameService.initiateAnswers(gameId, user)).pipe(
                     map(() => JoinGameActions.initiateUserAnswersSuccess({ gameId })),
                     catchError((error) => of(JoinGameActions.initiateUserAnswersFail({ message: 'Could not initiate user in game', error: JSON.stringify(error) })))
                 )

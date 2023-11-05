@@ -8,10 +8,22 @@ import { EffectsModule } from '@ngrx/effects';
 import { gameReducer, gameStateConfig, gameStateKey } from '../store/game/game.reducer';
 import { GameEffects } from '../store/game/game.effects';
 import { MatButtonModule } from '@angular/material/button';
+import { OwnerControlsComponent } from './owner-controls/owner-controls.component';
+import { ResultsComponent } from './results/results.component';
+import { TimerComponent } from './timer/timer.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { GameOptionComponent } from './game-option/game-option.component';
+import { StandByComponent } from './stand-by/stand-by.component';
+
 
 @NgModule({
   declarations: [
     GameComponent,
+    OwnerControlsComponent,
+    ResultsComponent,
+    TimerComponent,
+    GameOptionComponent,
+    StandByComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +31,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     StoreModule.forFeature(gameStateKey, gameReducer, gameStateConfig),
     EffectsModule.forFeature([GameEffects]),
+    FontAwesomeModule,
   ],
-  providers: []
+  exports: [TimerComponent]
 })
 export class GameModule { }

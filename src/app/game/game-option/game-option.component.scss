@@ -1,0 +1,228 @@
+:host{
+    width: 100%;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.layer1{
+    position: relative;
+    -webkit-border-radius: 11px;
+    -moz-border-radius: 11px;
+    border-radius: 11px;
+    width:100%;
+    min-height: 50px;
+    background:black;
+    -webkit-box-shadow: 0px 11px 2px #301C09;
+    -moz-box-shadow: 0px 11px 2px #301C09;
+    box-shadow: 0px 11px 2px #301C09;
+    cursor:pointer;
+    z-index: 0;
+    &:active{
+       transform: translateY(2px);
+    }
+    &.red{
+        .text{
+            text-shadow: -1px 0 1px #990000, 
+                         1px 0 1px #990000,
+                         0 -1px 1px #990000,
+                         0 4px 1px #990000,
+                         -2px 4px 1px #990000,
+                         2px 3px 2px #990000;
+            color:#FFFFCC; 
+        }
+        .layer2{
+            background:#FC3632;
+            -webkit-box-shadow: 0px 9px 0px #9C1814;
+            -moz-box-shadow: 0px 9px 0px #9C1814;
+            box-shadow: 0px 9px 0px #9C1814;
+            .layer3{
+                background:#FC4262;
+                -webkit-box-shadow: 0px 4px 3px 0px #E42625;
+                -moz-box-shadow:    0px 4px 3px 0px #E42625;
+                box-shadow:         0px 4px 3px 0px #E42625;
+                .layer4{
+                    background:#FF6666;
+                    .layer5{
+                        background:#FFC8C8;
+                    }
+                }
+            }
+        }
+    }
+    &.green{
+        .text{
+            text-shadow: -1px 0 1px #005F00, 
+            1px 0 1px #005F00,
+            0 -1px 1px #005F00,
+            0 4px 1px #005F00,
+            -2px 4px 1px #005F00,
+            2px 3px 2px #005F00;
+            color:#FEFEFE;
+        }
+        .layer2{
+            background:#09CC48;
+            -webkit-box-shadow: 0px 9px 0px #0D8F23;
+            -moz-box-shadow: 0px 9px 0px #0D8F23;
+            box-shadow: 0px 9px 0px #0D8F23;
+            .layer3{
+                background:#30ED45;
+                -webkit-box-shadow: 0px 4px 3px 0px #25D039;
+                -moz-box-shadow:    0px 4px 3px 0px #25D039;
+                box-shadow:         0px 4px 3px 0px #25D039;
+                .layer4{
+                    background:#50FF65;
+                    .layer5{
+                        background:#D9FFFF;
+                    }
+                }
+            }
+        }
+
+    }
+    &.blue{
+        .text{
+            text-shadow: -1px 0 1px #002F83, 
+            1px 0 1px #002F83,
+            0 -1px 1px #002F83,
+            0 4px 1px #002F83,
+            -2px 4px 1px #002F83,
+            2px 3px 2px #002F83;
+            color:#FEFEFE;
+        }
+        .layer2{
+            background:#2199FF;
+            -webkit-box-shadow: 0px 9px 0px #004FA5;
+            -moz-box-shadow: 0px 9px 0px #004FA5;
+            box-shadow: 0px 9px 0px #004FA5;
+            .layer3{
+                background:#4CADFF;
+                -webkit-box-shadow: 0px 4px 3px 0px #2181FC;
+                -moz-box-shadow:    0px 4px 3px 0px #2181FC;
+                box-shadow:         0px 4px 3px 0px #2181FC;
+                .layer4{
+                    background:#67BCFF;
+                    .layer5{
+                        background:#D9FFFF;
+                    }
+                }
+            }
+        }
+
+    }
+    &.disabled{
+        .text{
+            text-shadow: -1px 0 1px #4C4C4C , 
+                        1px 0 1px #4C4C4C ,
+                        0 -1px 1px #4C4C4C ,
+                        0 4px 1px #4C4C4C ,
+                        -2px 4px 1px #4C4C4C ,
+                        2px 3px 2px #4C4C4C ;
+            color:#E6E6E6; 
+        }
+        .layer2{
+            background:#7D7D7D;
+            -webkit-box-shadow: 0px 9px 0px #4C4C4C;
+            -moz-box-shadow: 0px 9px 0px #4C4C4C;
+            box-shadow: 0px 9px 0px #4C4C4C;
+            .layer3{
+                background:#7D7D7D;
+                -webkit-box-shadow: 0px 4px 3px 0px #7D7D7D;
+                -moz-box-shadow:    0px 4px 3px 0px #7D7D7D;
+                box-shadow:         0px 4px 3px 0px #7D7D7D;
+                .layer4{
+                    background:#B2B2B2;
+                    .layer5{
+                        background:#E6E6E6;
+                    }
+                }
+            }
+        }
+    }
+
+}
+.text{
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    font-family: "bungee",sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    color:#FFFFCC;
+    font-size: 1em;
+    text-align: center;
+    text-shadow: -1px 0 1px #582E00, 
+                1px 0 1px #582E00,
+                0 -1px 1px #582E00,
+                0 4px 1px #582E00,
+                -2px 4px 1px #582E00,
+                2px 3px 2px #582E00;
+    z-index: 1000;
+    min-height: 18px;
+    max-width: 100%;
+    padding: 16px;
+}
+  
+.layer2{
+    position:absolute;
+    top: 3px;
+    left: 3px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    width: calc(100% - 6px);
+    min-height: 44px;
+    height: calc(100% - 6%);
+    background:#FDA80D;
+    -webkit-box-shadow: 0px 9px 0px #AF6B06;
+    -moz-box-shadow: 0px 9px 0px #AF6B06;
+    box-shadow: 0px 9px 0px #AF6B06;
+    z-index: -1;
+
+}
+
+.layer3{
+    position:absolute;
+    top: 5px;
+    left: 5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    width: calc(100% - 10px);
+    min-height: 38px;
+    height: calc(100% - 12%);
+    background:rgba(255,187,42,1);
+    -webkit-box-shadow: 0px 4px 3px 0px #FE8906;
+    -moz-box-shadow:    0px 4px 3px 0px #FE8906;
+    box-shadow:         0px 4px 3px 0px #FE8906;
+    z-index: 997;
+
+}
+  
+.layer4{
+    position:absolute;
+    top: 5px;
+    left: 3px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    width: calc(100% - 6px);
+    min-height: 18px;
+    height: calc(100% - 50%);
+    background:#FFD053;
+    z-index: 998;
+}
+  
+.layer5{
+    position:absolute;
+    right: 0;
+    top: 0;
+    -webkit-border-radius: 45%;
+    -moz-border-radius: 45%;
+    border-radius: 45%;
+    width:7px;
+    height:9px;
+    background:#FFF1B6;
+    z-index: 999;
+}
