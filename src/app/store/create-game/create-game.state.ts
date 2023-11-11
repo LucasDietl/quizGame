@@ -23,15 +23,17 @@ export enum GameStatus {
 export enum SlideType {
     quiz = 'quiz',
     aOrB = 'aOrB',
+    answer = 'answer',
     results = 'results',
 }
 export interface SlidesToCreate  {
     gameId: string;
     type: SlideType;
     title: string;
+    order: number;
+    description?: string;
     points?: number;
     seconds?: number;
-    order: number;
     imageUrl?: string;
     options?: SlideOptions[]
 }

@@ -105,14 +105,9 @@ export class GameEffects {
             withLatestFrom(this.gameFacadeService.selectCurrentGame(), this.gameFacadeService.selectStateGameSlides(), this.gameFacadeService.selectCurrentUserAnswer()),
             filter(([,game, slides]) => slides?.length !== 0),
             map(([, game, slides, userAnswer]) => {
-
                 const slide = slides.find(slide => slide.id === game?.currentSlide);
-                console.log(slide?.id);
-                console.log(userAnswer?.slideId);
-                console.log(game);
                 const alreadyAnswered = slide?.id === userAnswer?.slideId;
                 const noTimeRemaining = (this.timeService.getTimeDifferenceInSeconds(game?.timeStamp as number, slide?.seconds as number) ?? 0) <= 0;
-                console.log(alreadyAnswered);
                 return GameActions.setIsDisableAnswer({ isDisabled: alreadyAnswered || noTimeRemaining });
             }),
         )

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DestroyableComponent } from '../utils/destroyable/destroyable.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UserFacadeService } from '../store/user/user-facade.service';
 import { GameFacadeService } from '../store/game/game.facade.service';
-import { first, map, tap } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Game, GameStatus, SlideOptions, SlideType, SlidesToPlay } from '../store/create-game/create-game.state';
 import { AuthUser } from '../store/user/user.interface';
@@ -31,6 +31,7 @@ export class GameComponent extends DestroyableComponent implements OnInit {
     constructor(private route: ActivatedRoute, private userFacadeService: UserFacadeService, private gameFacadeService: GameFacadeService) {
         super();
     }
+
     ngOnInit(): void {
         this.route.params.pipe(first()).subscribe(async params => {
             const gameId = params['id'];
@@ -58,8 +59,7 @@ export class GameComponent extends DestroyableComponent implements OnInit {
         this.gameFacadeService.setUserAnswer(pointsToAdd, slideId);
     }
 
-    public timeIsUp(event: any): void {
-        debugger;
+    public timeIsUp(event: void): void {
         this.gameFacadeService.setIsDisableAnswer(true);
     }
     trackBy(index: number, item: Answers): string {

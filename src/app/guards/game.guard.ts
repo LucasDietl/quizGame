@@ -9,7 +9,7 @@ export const GameGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
     const router: Router = inject(Router);
     const userService: UserFacadeService = inject(UserFacadeService);
     const gameId = route?.params?.id;
-    const userId = await userService.userId().pipe(first()).toPromise()
+    const userId = await userService.userId().pipe(first()).toPromise() as string;
     if(gameId){
         let answerPresent: boolean = false;
         let gameExists: boolean = false;

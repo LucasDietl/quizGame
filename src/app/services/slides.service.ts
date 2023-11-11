@@ -27,9 +27,9 @@ public getSlidesByGamesIdCall(gameId: string): Observable<SlidesToPlay[]> {
           const { title, type, order, gameId } = doc.data();
           let slide: SlidesToPlay = { id: doc.id, gameId, title, type, order };
 
-          if (type === SlideType.quiz || type === SlideType.aOrB) {
-            const { options, imageUrl, points, seconds } = doc.data();
-            slide = { ...slide, options, imageUrl, points, seconds};
+          if (type === SlideType.quiz || type === SlideType.aOrB || type === SlideType.answer) {
+            const { options, imageUrl, points, seconds, description } = doc.data();
+            slide = { ...slide, options, imageUrl, points, seconds, description};
           }
           slides[slide?.order || 0] = slide;
         });
@@ -50,9 +50,9 @@ public getSlidesByGamesIdCall(gameId: string): Observable<SlidesToPlay[]> {
     querySnapshot.forEach((doc) => {
       const { title, type, order, gameId } = doc.data();
           let slide: SlidesToPlay = { id: doc.id, gameId, title, type, order };
-          if (type === SlideType.quiz || type === SlideType.aOrB) {
-            const { options, imageUrl, points, seconds } = doc.data();
-            slide = { ...slide, options, imageUrl, points, seconds};
+          if (type === SlideType.quiz || type === SlideType.aOrB || type === SlideType.answer) {
+            const { options, imageUrl, points, seconds, description } = doc.data();
+            slide = { ...slide, options, imageUrl, points, seconds, description};
           }
           slides[slide?.order || 0] = slide;
     });

@@ -161,7 +161,6 @@ export class GameService {
     querySnapshot.forEach((doc) => {
         const fireStoreDateData: { seconds: number, nanoseconds: number } = doc.data()?.joinedTimeStamp;
         const joinedTimeStamp = this.generateTimeStamp(fireStoreDateData);
-        debugger;
         const { totalPoints, previousTotalPoints, gameId, userId, slideId, nickName } = doc.data();
         const answer = { id: doc.id, totalPoints, previousTotalPoints, gameId, userId, slideId, nickName, joinedTimeStamp };
         answers.push(answer);

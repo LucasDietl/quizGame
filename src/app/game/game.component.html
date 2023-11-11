@@ -29,9 +29,9 @@
                     </div>
                 </ng-container>
             </div>
-            <div *ngSwitchCase="gameStatus.finished">
-                finished
-            </div>
+            <ng-container *ngSwitchCase="gameStatus.finished">
+                <qz-finish [nickName]="user.nickName" [usersAnswers]="allUsersAnswersRanking$ | async" [userAnswer]="userAnswer$ | async"></qz-finish>
+            </ng-container>
         </div>
         <div *ngIf="user?.id === game.ownerId">
             <qz-owner-controls [currentSlideId]="currentSlideId$ | async" [game]="game" [user]="user"></qz-owner-controls>

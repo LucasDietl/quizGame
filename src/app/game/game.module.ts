@@ -14,7 +14,9 @@ import { TimerComponent } from './timer/timer.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GameOptionComponent } from './game-option/game-option.component';
 import { StandByComponent } from './stand-by/stand-by.component';
-
+import { FinishComponent } from './finish/finish.component';
+import { NgParticlesModule } from 'ng-particles';
+import { AnswerComponent } from './answer/answer.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { StandByComponent } from './stand-by/stand-by.component';
     ResultsComponent,
     TimerComponent,
     GameOptionComponent,
-    StandByComponent
+    StandByComponent,
+    FinishComponent,
+    AnswerComponent
   ],
   imports: [
     CommonModule,
@@ -32,6 +36,7 @@ import { StandByComponent } from './stand-by/stand-by.component';
     StoreModule.forFeature(gameStateKey, gameReducer, gameStateConfig),
     EffectsModule.forFeature([GameEffects]),
     FontAwesomeModule,
+    NgParticlesModule 
   ],
   exports: [TimerComponent]
 })

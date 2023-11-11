@@ -85,17 +85,24 @@ export class CreateGameComponent extends DestroyableComponent implements OnInit 
       type,
       gameId: this.selectedGame.id,
       title: 'New Slide Question or title',
+      description: 'New Slide description',
       order
     }
-    if ( type !== 'results') {
-      const amount = type === this.slideType.quiz ? 4 : type === this.slideType.aOrB ? 2: 0;
-      const options = new Array(amount).fill({ title: 'Add answer or title', isCorrect: false});
-      newSlide = { ...newSlide,
-        seconds: 15,
-        points: 100,
-        imageUrl: '',
-        options: options
-      };
+    switch (type) {
+      case SlideType.aOrB:
+      case SlideType.quiz:
+        const amount = type === this.slideType.quiz ? 4 : type === this.slideType.aOrB ? 2: 0;
+        const options = new Array(amount).fill({ title: 'Add answer or title', isCorrect: false});
+        newSlide = { ...newSlide,
+          seconds: 15,
+          points: 100,
+          imageUrl: '',
+          options: options
+        };
+        break;
+    
+      default:
+        break;
     }
 
     this.createGameFacadeService.addNewSlide(this.selectedGame.id, newSlide);
