@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { DocumentData, DocumentSnapshot, FieldValue, Firestore, QuerySnapshot, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where, writeBatch } from '@angular/fire/firestore';
-import { collectionNames } from 'src/app/utils/helpers/collection-names';
-import { Game, GameStatus, SlidesToPlay } from '../store/create-game/create-game.state';
+import { DocumentData, Firestore, QuerySnapshot, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, writeBatch } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { FireStoreOperators } from '../utils/helpers/firestore.operators';
+import { collectionNames } from 'src/app/utils/helpers/collection-names';
+import { Game, GameStatus, GameTimeAndStatus, SlidesToPlay } from '../store/create-game/create-game.state';
 import { Answers } from '../store/game/game.state';
-import { User } from '../store/user/user.interface';
+import { FireStoreOperators } from '../utils/helpers/firestore.operators';
 
 
 
@@ -16,15 +15,41 @@ export class GameService {
     constructor(private firestore: Firestore) {
     }
 
-    public getGameByIdCall(gameId: string): Observable<Game> {
+    public async getGameByIdOnce(gameId: string): Promise<Game> {
         const gameInstance = doc(this.firestore, collectionNames.games, gameId);
+        const gameDoc = await getDoc(gameInstance);
+        // const fireStoreDateData: { seconds: number, nanoseconds: number } = gameDoc.data()?.timeStamp;
+        // const timeStamp = fireStoreDateData ? this.generateTimeStamp(fireStoreDateData) : 0;
+        const { title, ownerId, slides, answers } = gameDoc.data() as Game;
+        const game: Game = { id: gameDoc.id, title, ownerId, slides, answers };
+        return game;
+    }
+
+    // public getGameByIdCall(gameId: string): Observable<Game> {
+    //     const gameInstance = doc(this.firestore, collectionNames.games, gameId);
+    //     return new Observable((observer) => {
+    //         const unsubscribe = onSnapshot(gameInstance, (docSnapshot) => {
+    //             const fireStoreDateData: { seconds: number, nanoseconds: number } = docSnapshot.data()?.timeStamp;
+    //             const timeStamp = fireStoreDateData ? this.generateTimeStamp(fireStoreDateData) : 0;
+    //             const { title, ownerId, slides, status, answers, currentSlide } = docSnapshot.data() as Game;
+    //             const game: Game = { id: docSnapshot.id, title, ownerId, slides, status, answers, currentSlide, timeStamp };
+    //             observer.next(game);
+    //         });
+    //         return () => {
+    //             unsubscribe();
+    //         };
+    //     });
+    // }
+
+    public getCurrentSlideIdAndTimeStamp(gameId: string): Observable<GameTimeAndStatus> {
         return new Observable((observer) => {
-            const unsubscribe = onSnapshot(gameInstance, (docSnapshot) => {
-                const fireStoreDateData: { seconds: number, nanoseconds: number } = docSnapshot.data()?.timeStamp;
-                const timeStamp = fireStoreDateData ? this.generateTimeStamp(fireStoreDateData) : 0;
-                const { title, ownerId, slides, status, answers, currentSlide } = docSnapshot.data() as Game;
-                const game: Game = { id: docSnapshot.id, title, ownerId, slides, status, answers, currentSlide, timeStamp };
-                observer.next(game);
+            const unsubscribe = onSnapshot(doc(this.firestore, collectionNames.status, gameId), (doc) => {
+                const fireStoreDateData: { seconds: number, nanoseconds: number } = doc.data()?.timeStamp ?? { seconds: 0, nanoseconds: 0};
+                const timeStamp = this.generateTimeStamp(fireStoreDateData);
+                const { currentSlideId, status } = doc.data() as GameTimeAndStatus;
+                const gameStatus: GameTimeAndStatus = { currentSlideId, status, timeStamp};
+
+                observer.next(gameStatus);
             });
             return () => {
                 unsubscribe();
@@ -41,10 +66,8 @@ export class GameService {
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
                 const games: Game[] = [];
                 querySnapshot.forEach((doc) => {
-                    const fireStoreDateData: { seconds: number, nanoseconds: number } = doc.data()?.timeStamp;
-                    const timeStamp = this.generateTimeStamp(fireStoreDateData);
-                    const { title, ownerId, slides, status, answers, currentSlide } = doc.data();
-                    const game = { id: doc.id, title, ownerId, slides, status, answers, currentSlide, timeStamp };
+                    const { title, ownerId, slides, status, answers } = doc.data();
+                    const game = { id: doc.id, title, ownerId, slides, status, answers };
                     games.push(game);
                 });
                 observer.next(games);
@@ -61,8 +84,12 @@ export class GameService {
 
     public async createGame(game: Partial<Game>): Promise<string> {
         const collectionInstance = collection(this.firestore, collectionNames.games);
-        const gameToCreate = { ...game, timestamp: serverTimestamp() }
+        const gameToCreate = { ...game,  };
         const data = await addDoc(collectionInstance, gameToCreate);
+        const gameId = data.id;
+        const statusToCreate = { currentSlideId: '', status: GameStatus.standBy, timeStamp: serverTimestamp() };
+        const docToAdd = doc(this.firestore, collectionNames.status, gameId)
+        await setDoc(docToAdd, statusToCreate);
         return data.id;
     }
 
@@ -92,31 +119,31 @@ export class GameService {
         });
     }
 
-    public changeGameStatusCall(gameStatus: GameStatus, gameId: string): Promise<void> {
-        const docInstance = doc(this.firestore, collectionNames.games, gameId);
-        const newStatus: Partial<Game> = { status: gameStatus };
-        const game = { ...newStatus, timeStamp: serverTimestamp() };
+    public changeGameStatusCall(gameStatus: GameStatus, gameId: string, nextSlideId: string = ''): Promise<void> {
+        const docInstance = doc(this.firestore, collectionNames.status, gameId);
+        const newStatus: Partial<GameTimeAndStatus> = { status: gameStatus };
+        let status = { ...newStatus, timeStamp: serverTimestamp(), currentSlideId: nextSlideId };
         if (gameStatus === GameStatus.finished) {
-            game.currentSlide = '';
+            status.currentSlideId = '';
         }
-        return updateDoc(docInstance, game);
+        return updateDoc(docInstance, status);
+
     }
 
-    public getNextSlideId(game: Game, slides: SlidesToPlay[]): string {
-        const { currentSlide } = game;
+    public getNextSlideId(currentSlideId: string, slides: SlidesToPlay[]): string {
         let order = 0
-        if (currentSlide) {
-            order = slides.find(slide => slide.id === currentSlide)?.order ?? 0;
+        if (currentSlideId) {
+            order = slides.find(slide => slide.id === currentSlideId)?.order ?? 0;
             order = order + 1;
         }
         return slides.find(slide => slide.order === order)?.id ?? '';
     }
 
     public setCurrentSlide(gameId: string, slideId: string): Promise<void> {
-        const docInstance = doc(this.firestore, collectionNames.games, gameId);
-        const currentSlideUpdate: Partial<Game> = slideId === '' ? { currentSlide: slideId, status: GameStatus.finished}: { currentSlide: slideId };
-        const game = { ...currentSlideUpdate, timeStamp: serverTimestamp() }
-        return updateDoc(docInstance, game);
+        const statusInstance = doc(this.firestore, collectionNames.status, gameId);
+        const currentSlideUpdate: Partial<GameTimeAndStatus> = slideId === '' ? { currentSlideId: slideId, status: GameStatus.finished}: { currentSlideId: slideId };
+        const status = { timeStamp: serverTimestamp(), ...currentSlideUpdate };
+        return updateDoc(statusInstance, status);
     }
 
     public setUserAnswer(answerId: string, points: number, slideId: string): Promise<void> {

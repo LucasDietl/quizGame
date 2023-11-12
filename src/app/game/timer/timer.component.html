@@ -1,1 +1,2 @@
-<div class="shadow-text timer" *ngIf="remainingTime !== 0">00:{{remainingTime}}</div>
+<div class="shadow-text timer" *ngIf="remainingTime !== 0">00:{{remainingTime | number: '2.0-0'}}</div>
+<div class="shadow-text timer" *ngIf="remainingTime === 0">00:00</div>

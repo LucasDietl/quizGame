@@ -8,7 +8,7 @@
     <h2 class="shadow-text title"> ¡ Ganadores ! </h2>
 </div>
 <div class="shadow-text podium-container">
-    <ng-container *ngFor="let answer of usersAnswers2; index as i">
+    <ng-container *ngFor="let answer of usersAnswers; index as i">
         <div *ngIf="i < 3" class="podium podium-second" [class.podium-second]="i === 1" [class.podium-first]="i === 0" [class.podium-third]="i === 2">
             <div class="name"> {{answer.nickName}}</div>
             <div class="position">{{i+1}}</div>
@@ -17,7 +17,7 @@
     </ng-container>
 </div>
 <div class="general-container">
-    <ng-container  *ngFor="let user of usersAnswers2; index as i">
+    <ng-container  *ngFor="let user of usersAnswers; index as i">
         <div  *ngIf="i > 2" class="general-users shadow-text">
             <div class="general-position">
                 {{ i + 1 ?? 'xx'}}º 

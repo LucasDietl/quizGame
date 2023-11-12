@@ -99,7 +99,16 @@ public getSlidesByGamesIdCall(gameId: string): Observable<SlidesToPlay[]> {
     const batch = writeBatch(this.firestore);
     slides.forEach((slide) => {
       const slideInstance = doc(this.firestore, collectionNames.slides, slide.id);
-      const slideNew: Partial<SlidesToCreate> = slide.type !== SlideType.results ? { options: slide.options, title: slide.title, imageUrl: slide.imageUrl } : { title: slide.title, imageUrl: slide.imageUrl };
+      let slideNew: Partial<SlidesToCreate> = { title: slide.title, imageUrl: slide.imageUrl, description: slide.description };
+      switch (slide.type) {
+        case SlideType.aOrB:
+        case SlideType.quiz:
+          slideNew = { ...slideNew, options: slide.options}
+          break;
+      
+        default:
+          break;
+      }
       setDoc(slideInstance, slideNew, { merge: true });
     });
     batch.commit();

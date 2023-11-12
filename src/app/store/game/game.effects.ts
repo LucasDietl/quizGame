@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { from, interval, of, timer } from 'rxjs';
-import { catchError, debounceTime, filter, map, mergeMap, switchMap, take, takeUntil, takeWhile, tap, withLatestFrom, } from 'rxjs/operators';
+import { from, of } from 'rxjs';
+import { catchError, filter, first, map, mergeMap, switchMap, debounceTime, withLatestFrom } from 'rxjs/operators';
 import { GameService } from 'src/app/services/game.service';
-import * as GameActions from './game.actions';
-import { openDialog } from '../dialog/dialog.actions';
 import { SlidesService } from 'src/app/services/slides.service';
-import { GameFacadeService } from './game.facade.service';
-import { UserFacadeService } from '../user/user-facade.service';
 import { TimeService } from 'src/app/services/time.service';
+import { openDialog } from '../dialog/dialog.actions';
+import { UserFacadeService } from '../user/user-facade.service';
+import * as GameActions from './game.actions';
+import { GameFacadeService } from './game.facade.service';
 
 @Injectable()
 export class GameEffects {
@@ -24,9 +24,9 @@ export class GameEffects {
         this.actions$.pipe(
             ofType(GameActions.getCurrentGameById),
             switchMap(({ gameId }) => {
-                return from(this.gameService.getGameByIdCall(gameId)).pipe(
-                    withLatestFrom(this.gameFacadeService.selectStateGameSlides()),
-                    mergeMap(([game, slides]) => [GameActions.getCurrentGameByIdSuccess({ game }), ...(slides.length === 0 ? [GameActions.getSlidesByGameIdOnce({ gameId })] : [])]),
+                return from(this.gameService.getGameByIdOnce(gameId)).pipe(
+                    first(),
+                    mergeMap((game) => [GameActions.getCurrentGameByIdSuccess({ game }), GameActions.getSlidesByGameIdOnce({ gameId })]),
                     catchError((_) => of(openDialog({ title: 'Error Getting game by ID' })))
                 )
             }),
@@ -38,7 +38,20 @@ export class GameEffects {
             ofType(GameActions.getSlidesByGameIdOnce),
             switchMap(({ gameId }) => {
                 return from(this.slidesService.getSlidesOnceByGamesIdCall(gameId)).pipe(
-                    map((slides) => GameActions.getSlidesByGameIdOnceSuccess({ slides })),
+                    first(),
+                    map((slides) => GameActions.getSlidesByGameIdOnceSuccess({ slides, gameId })),
+                    catchError((_) => of(openDialog({ title: 'Error Getting slides by game ID Once' })))
+                );
+            }),
+        )
+    );
+
+    getStatusAndTime$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(GameActions.getSlidesByGameIdOnceSuccess),
+            switchMap(({ gameId }) => {
+                return this.gameService.getCurrentSlideIdAndTimeStamp(gameId).pipe(
+                    map((data) => GameActions.getGameTimeAndStatusSuccess({ data })),
                     catchError((_) => of(openDialog({ title: 'Error Getting slides by game ID Once' })))
                 );
             }),
@@ -46,32 +59,52 @@ export class GameEffects {
     );
 
 
+
     changeGameStatus$ = createEffect(() =>
         this.actions$.pipe(
             ofType(GameActions.changeGameStatus),
-            switchMap(({ gameStatus, gameId }) => {
-                return from(this.gameService.changeGameStatusCall(gameStatus, gameId)).pipe(
-                    map(() => GameActions.changeGameStatusSuccess({ gameStatus, gameId })),
+            withLatestFrom(this.gameFacadeService.selectGameSlides(), this.gameFacadeService.selectCurrentSlideId()),
+            switchMap(([{ gameStatus, gameId }, slides, currentSlideId]) => {
+                const slideId = this.gameService.getNextSlideId(currentSlideId, slides);
+                return from(this.gameService.changeGameStatusCall(gameStatus, gameId, slideId)).pipe(
+                    map(() => GameActions.changeGameStatusSuccess()),
                     catchError((_) => of(openDialog({ title: 'Error changing game status' })))
                 );
             }),
+            catchError((_) => { debugger;return of(openDialog({ title: 'Error changing game status Effect' }))})
         )
     );
 
-    gameStartedHandler$ = createEffect(() =>
+    setNextSlide$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(GameActions.changeGameStatusSuccess, GameActions.setNextSlideId),
-            withLatestFrom(this.gameFacadeService.selectCurrentGame(), this.gameFacadeService.selectGameSlides()),
-            switchMap(([, game, slides]) => {
-                const slideId = this.gameService.getNextSlideId(game!, slides);
-                return from(this.gameService.setCurrentSlide(game!.id, slideId)).pipe(
+            ofType(GameActions.setNextSlideId),
+            withLatestFrom(this.gameFacadeService.selectGameSlides(), this.gameFacadeService.selectCurrentGameId(), this.gameFacadeService.selectCurrentSlideId()),
+            switchMap(([ _, slides, gameId, currentSlideId]) => {
+                const slideId = this.gameService.getNextSlideId(currentSlideId, slides);
+                return from(this.gameService.setCurrentSlide(gameId, slideId)).pipe(
                     map(() => GameActions.setNextSlideIdSuccess()),
-                    catchError((_) => of(openDialog({ title: 'Error changing game status' })))
+                    catchError((_) => of(openDialog({ title: 'Error changing slides' })))
                 );
             }),
-            catchError((_)=> of(openDialog({ title: 'Error on gameStartedHandler' })))
+            catchError((_)=> of(openDialog({ title: 'Error on setNextSlide' })))
         )
     );
+
+    // gameStartedHandler$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(GameActions.getGameTimeAndStatusSuccess),
+    //         withLatestFrom(this.gameFacadeService.selectGameSlides(), this.gameFacadeService.selectCurrentGameId()),
+    //         switchMap(([{data}, slides, gameId]) => {
+    //             debugger
+    //             const slideId = this.gameService.getNextSlideId(data.currentSlideId, slides);
+    //             return from(this.gameService.setCurrentSlide(gameId, slideId)).pipe(
+    //                 map(() => GameActions.setNextSlideIdSuccess()),
+    //                 catchError((_) => of(openDialog({ title: 'Error changing game status' })))
+    //             );
+    //         }),
+    //         catchError((_)=> of(openDialog({ title: 'Error on gameStartedHandler' })))
+    //     )
+    // );
 
     getAllUsersAnswers$ = createEffect(() =>
         this.actions$.pipe(
@@ -101,14 +134,17 @@ export class GameEffects {
 
     checkGameUpdatesToStartTimer$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(GameActions.getCurrentGameByIdSuccess, GameActions.getSlidesByGameIdOnceSuccess),
-            withLatestFrom(this.gameFacadeService.selectCurrentGame(), this.gameFacadeService.selectStateGameSlides(), this.gameFacadeService.selectCurrentUserAnswer()),
-            filter(([,game, slides]) => slides?.length !== 0),
-            map(([, game, slides, userAnswer]) => {
-                const slide = slides.find(slide => slide.id === game?.currentSlide);
+            ofType(GameActions.getGameTimeAndStatusSuccess),
+            withLatestFrom(this.gameFacadeService.selectStatusTimeAndCurrentSlideId(), this.gameFacadeService.selectStateGameSlides(), this.gameFacadeService.selectCurrentUserAnswer()),
+            filter(([,,slides]) => slides?.length !== 0),
+            debounceTime(300),
+            switchMap(([, data, slides, userAnswer]) => {
+                const slide = slides.find(slide => slide.id === data?.currentSlideId);
                 const alreadyAnswered = slide?.id === userAnswer?.slideId;
-                const noTimeRemaining = (this.timeService.getTimeDifferenceInSeconds(game?.timeStamp as number, slide?.seconds as number) ?? 0) <= 0;
-                return GameActions.setIsDisableAnswer({ isDisabled: alreadyAnswered || noTimeRemaining });
+                const noTimeRemaining = (this.timeService.getTimeDifferenceInSeconds(data?.timeStamp as number, slide?.seconds as number) ?? 0) <= 0;
+                // console.log({alreadyAnswered});
+                // console.log({noTimeRemaining});
+                return of(GameActions.setIsDisableAnswer({ isDisabled: alreadyAnswered || noTimeRemaining }));
             }),
         )
     );

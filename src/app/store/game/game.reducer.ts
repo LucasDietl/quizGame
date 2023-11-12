@@ -10,6 +10,10 @@ export const initialGameState: GameState = {
 	slides: [],
 	answers: [],
 	disableAnswers: true,
+	currentSlideId: '',
+	timeStamp: 0,
+	status: null
+
 };
 
 export const gameReducer = createReducer(
@@ -22,6 +26,15 @@ export const gameReducer = createReducer(
 		...state,
 		slides,
 	})),
+	on(GameActions.getGameTimeAndStatusSuccess, (state, { data }) => {
+		return {
+			...state,
+			loading: true,
+			currentSlideId: data.currentSlideId,
+			status: data.status,
+			timeStamp: data.timeStamp
+		}
+	}),
 	on(GameActions.getAllUsersAnswersSuccess, (state, { answers }) => ({
 		...state,
 		answers: answers,
@@ -31,6 +44,7 @@ export const gameReducer = createReducer(
 	})),
 	on(GameActions.setIsDisableAnswer, (state, { isDisabled }) => ({
 		...state,
+		loading: false,
 		disableAnswers: isDisabled
 	})),
 );

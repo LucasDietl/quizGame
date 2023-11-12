@@ -1,5 +1,3 @@
-import { FieldValue } from "@angular/fire/firestore";
-
 export interface CreateGameState {
     games: Game[];
     slides: SlidesToPlay[];
@@ -10,10 +8,7 @@ export interface Game {
     title: string;
     slides: string[];
     ownerId: string;
-    status: GameStatus;
     answers: string[];
-    currentSlide: string;
-    timeStamp: number;
 }
 export enum GameStatus {
     standBy = 'standBy',
@@ -45,4 +40,10 @@ export interface SlidesToPlay extends SlidesToCreate {
 export interface SlideOptions {
     title: string;
     isCorrect: boolean;
+}
+
+export interface GameTimeAndStatus {
+    timeStamp: number;
+    status: GameStatus | null;
+    currentSlideId: string;
 }

@@ -42,7 +42,6 @@ export class JoinGameComponent extends DestroyableComponent implements OnInit{
     if (gameId) {
       this.joinGameFacadeService.joinGameById(gameId);
     }
-    console.log('Add join game logic here', this.joinGameForm.value);
   }
 
   public createNewGame(): void {

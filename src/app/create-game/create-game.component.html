@@ -1,16 +1,17 @@
 <div class="wrapper center">
     <h1 class="mat-title">Game creation</h1>
-    <h2 class="mat-subheading">Edit existing one (soon)</h2>
+    <!-- <h2 class="mat-subheading">Edit existing one (soon)</h2> -->
     <button *ngIf="!selectedGame" mat-raised-button color="secondary" type="button"(click)="createNewGame()">Create new</button>
     
 
     <div class="center slides-wrapper container" *ngIf="selectedGame as game">
         <p *ngIf="game?.slides?.length === 0"> Add new slides to start </p>
-        <button mat-raised-button color="primary" type="button"(click)="addNewSlide(slideType.quiz)">Add Quiz </button>
-        <button mat-raised-button color="primary" type="button"(click)="addNewSlide(slideType.aOrB)">Add A/B </button>
-        <button mat-raised-button color="primary" type="button"(click)="addNewSlide(slideType.results)">Add results</button>
-        <button mat-raised-button color="warn" type="button" (click)="deleteGame()">Delete Game</button>
-        <button mat-raised-button color="secondary" type="button" (click)="goToGame()">Start Game</button>
+        <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.quiz)">Add Quiz </button>
+        <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.aOrB)">Add A/B </button>
+        <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.results)">Add results</button>
+        <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.answer)">Add answer</button>
+        <button mat-raised-button class="slide-option" color="warn" type="button" (click)="deleteGame()">Delete Game</button>
+        <button mat-raised-button class="slide-option" color="secondary" type="button" (click)="goToGame()">Start Game</button>
 
 
         <form [formGroup]="gameForm" (ngSubmit)="onSubmit()">

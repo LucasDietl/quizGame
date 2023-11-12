@@ -16,6 +16,10 @@
         <mat-label>Slide question / name</mat-label>
         <input matInput formControlName="title" placeholder="Slide Title">
       </mat-form-field>
+      <mat-form-field *ngIf="type === slideType.answer">
+        <mat-label>Slide description</mat-label>
+        <input matInput formControlName="description" placeholder="Description">
+      </mat-form-field>
       <ng-container *ngIf="screenSize$ | async as screenSize">
         <mat-grid-list [cols]="screenSize === screenSizeNames.XSmall || screenSize === screenSizeNames.Small ? 1 : 2" rowHeight="4:1" formArrayName="options">
           <ng-container *ngFor="let option of slideForm.get('options').controls; let j = index">

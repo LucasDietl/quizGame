@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { DocumentData, DocumentReference, Firestore, addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, writeBatch } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, serverTimestamp } from '@angular/fire/firestore';
 import { collectionNames } from 'src/app/utils/helpers/collection-names';
-import { FireStoreOperators } from 'src/app/utils/helpers/firestore.operators';
-import { SlideType, SlidesToCreate, SlidesToPlay } from '../store/create-game/create-game.state';
-import { AuthUser } from '../store/user/user.interface';
 import { Answers } from '../store/game/game.state';
+import { AuthUser } from '../store/user/user.interface';
 
 
 @Injectable({

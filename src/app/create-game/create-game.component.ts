@@ -66,9 +66,9 @@ export class CreateGameComponent extends DestroyableComponent implements OnInit 
       title: 'New Game',
       slides: [],
       ownerId: this.userId,
-      status: GameStatus.standBy,
-      answers: [],
-      currentSlide: '',
+      // status: GameStatus.standBy,
+      // answers: [],
+      // currentSlide: '',
     };
     const id = await this.createGameFacadeService.createGame(newGame);
     this.setGameById(id);
@@ -130,12 +130,14 @@ export class CreateGameComponent extends DestroyableComponent implements OnInit 
   }
 
   private createSlideFormGroup(slide: SlidesToPlay) {
+
     return this.formBuilder.group({
       id: slide.id,
       type: slide.type,
       title: slide.title,
       imageUrl: slide?.imageUrl,
       order: slide.order,
+      description: slide?.description,
       points: slide?.points,
       seconds: slide?.seconds,
       options: slide.options ? this.formBuilder.array(

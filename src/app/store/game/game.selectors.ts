@@ -10,14 +10,39 @@ export const selectGame = createSelector(
   (state) => state.game
 );
 
-export const selectGameTimeStamp = createSelector(
-  selectGame,
-  (state) => state?.timeStamp
+export const selectLoading = createSelector(
+  selectGameState,
+  (state) => state.loading
 );
+
+export const selectGameId = createSelector(
+  selectGame,
+  (game) => game?.id
+);
+
+export const selectGameTimeStamp = createSelector(
+  selectGameState,
+  (state) => state?.timeStamp || 0
+);
+export const selectGameStatus = createSelector(
+  selectGameState,
+  (state) => state?.status
+);
+
 
 export const selectGameSlides = createSelector(
   selectGameState,
   (state) => state.slides
+);
+export const selectStatusTimeAndCurrentSlideId = createSelector(
+  selectGameState,
+  (state) => { 
+    return {
+      currentSlideId: state.currentSlideId,
+      status: state?.status,
+      timeStamp: state.timeStamp
+    }
+  }
 );
 
 export const selectStateSlides = createSelector(
@@ -26,8 +51,8 @@ export const selectStateSlides = createSelector(
 );
 
 export const selectCurrentSlideId = createSelector(
-  selectGame,
-  (state) => state?.currentSlide ?? ''
+  selectGameState,
+  (state) => state?.currentSlideId ?? ''
 );
 
 export const selectCurrentSlide = createSelector(

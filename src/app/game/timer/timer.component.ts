@@ -9,7 +9,7 @@ import { DestroyableComponent } from 'src/app/utils/destroyable/destroyable.comp
     templateUrl: './timer.component.html',
     styleUrls: ['./timer.component.scss']
 })
-export class TimerComponent extends DestroyableComponent implements OnInit {
+export class TimerComponent extends DestroyableComponent {
     private countdownSubscription!: Subscription;
     remainingTime: number = 0;
     private timeStamp: number = 0;
@@ -29,16 +29,11 @@ export class TimerComponent extends DestroyableComponent implements OnInit {
         super();
     }
 
-    ngOnInit(): void {
-
-    }
-
     private setInterval(remainingSeconds: number): void {
         this.cancelCountdown();
         this.countdownSubscription = interval(1000)
             .pipe(takeUntil(this.destroyed$))
             .subscribe((value) => {
-                console.log('TIMER RUNNING!!!!!:', value)
                 this.remainingTime = remainingSeconds - value;
                 if (this.remainingTime <= 0) {
                     this.timeIsUp.emit();

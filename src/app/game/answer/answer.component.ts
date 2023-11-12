@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'qz-answer',
@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./answer.component.scss']
 })
 export class AnswerComponent {
-
+  @Input() title: string = '';
+  @Input() imageUrl: string = '';
+  @Input() description: string = '';
 }

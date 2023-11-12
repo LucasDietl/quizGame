@@ -1,13 +1,15 @@
+import { selectGameStatus } from './../store/game/game.selectors';
 import { Component, OnInit } from '@angular/core';
 import { DestroyableComponent } from '../utils/destroyable/destroyable.component';
 import { ActivatedRoute } from '@angular/router';
 import { UserFacadeService } from '../store/user/user-facade.service';
 import { GameFacadeService } from '../store/game/game.facade.service';
-import { first } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { first, takeUntil } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { Game, GameStatus, SlideOptions, SlideType, SlidesToPlay } from '../store/create-game/create-game.state';
 import { AuthUser } from '../store/user/user.interface';
 import { Answers } from '../store/game/game.state';
+import { GameService } from '../services/game.service';
 
 @Component({
     selector: 'qz-game',
@@ -27,6 +29,8 @@ export class GameComponent extends DestroyableComponent implements OnInit {
     public gameStatus = GameStatus;
     public slideType = SlideType;
     public currentSlideId$!: Observable<string>;
+    public status$!:Observable<GameStatus | null>;
+    public loading: boolean = true;
 
     constructor(private route: ActivatedRoute, private userFacadeService: UserFacadeService, private gameFacadeService: GameFacadeService) {
         super();
@@ -39,6 +43,7 @@ export class GameComponent extends DestroyableComponent implements OnInit {
             this.gameFacadeService.getGameById(gameId);
             this.gameFacadeService.getAllUsersAnswers(this.gameId);
             this.setObservables();
+
         });
     }
 
@@ -50,8 +55,13 @@ export class GameComponent extends DestroyableComponent implements OnInit {
         this.disableAnswers$ = this.gameFacadeService.selectDisabledAnswers();
         this.userAnswer$ = this.gameFacadeService.selectCurrentUserAnswer();
         this.timeStamp$ = this.gameFacadeService.selectGameTimeStamp();
+        this.status$ = this.gameFacadeService.selectGameStatus(); 
         this.allUsersAnswers$ = this.gameFacadeService.selectAllUsersAnswersByJoinTime();
         this.allUsersAnswersRanking$ = this.gameFacadeService.selectAllUsersAnswersByRanking()
+        this.gameFacadeService.selectLoading().pipe(takeUntil(this.destroyed$)).subscribe(loading => {
+            console.log({loading})
+            this.loading = loading;
+        });
     }
 
     public selectedOption(option: SlideOptions, slideId: string, points: number = 0) {

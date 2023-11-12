@@ -16,6 +16,7 @@ export class CreationSlideComponent implements OnInit {
   public areYouSure: boolean = false;
   public imageUrlPreview: string = '';
   public type: SlideType = SlideType.quiz;
+  public slideType = SlideType;
   public screenSize$: Observable<string> = of();
   public screenSizeNames = screenSizeNames;
   constructor(private commonFacadeService: CommonFacadeService){}

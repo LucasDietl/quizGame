@@ -1,1 +1,7 @@
-<p>answer works!</p>
+<h3 class="title">{{ title }}</h3>
+<div  *ngIf="imageUrl" class="preview">
+    <img id="tv" [src]="imageUrl" alt="game image">
+</div>
+<div class="description shadow-text">
+    {{description}}
+</div>

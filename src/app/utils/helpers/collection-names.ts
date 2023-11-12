@@ -3,4 +3,5 @@ export enum collectionNames {
     games = 'games',
     slides = 'slides',
     answers = 'answers',
+    status = 'status'
 }

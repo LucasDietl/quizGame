@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
-import { Game, GameStatus, SlidesToPlay } from 'src/app/store/create-game/create-game.state';
+import { Game, GameStatus } from 'src/app/store/create-game/create-game.state';
 import { GameFacadeService } from 'src/app/store/game/game.facade.service';
 import { AuthUser } from 'src/app/store/user/user.interface';
 import { DestroyableComponent } from 'src/app/utils/destroyable/destroyable.component';
@@ -15,6 +15,8 @@ export class OwnerControlsComponent extends DestroyableComponent implements OnIn
     @Input() game!: Game;
     @Input() user!: AuthUser;
     @Input() currentSlideId!: string;
+    @Input() status!: GameStatus;
+
 
     public gameStatus = GameStatus;
     public lastSlideId!: string;
@@ -27,10 +29,18 @@ export class OwnerControlsComponent extends DestroyableComponent implements OnIn
     }
 
     private setSubscriptions(): void {
-        combineLatest([this.gameFacadeService.selectAllUsersAnswers(), this.gameFacadeService.selectCurrentSlideId()]).pipe(takeUntil(this.destroyed$)).subscribe(([allAnswers, currentSlideId]) => {
-            if (this.game?.status === GameStatus.inProgress && allAnswers?.length) {
+        combineLatest([
+            this.gameFacadeService.selectAllUsersAnswers(),
+            this.gameFacadeService.selectStatusTimeAndCurrentSlideId()
+        ]).pipe(
+            debounceTime(200),
+            takeUntil(this.destroyed$)
+        ).subscribe(([allAnswers, data]) => {
+            const {currentSlideId, status} = data;
+            if (currentSlideId && status === GameStatus.inProgress && allAnswers?.length) {
                 const allAnswered = allAnswers.every((answer) => answer.slideId === currentSlideId);
                 if (allAnswered) {
+                    debugger;
                     this.gameFacadeService.setNextSlideId();
                 }
             }

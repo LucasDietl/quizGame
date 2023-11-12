@@ -19,17 +19,6 @@ import { loadFull } from "tsparticles";
 export class FinishComponent implements OnInit {
   @Input() nickName: string = '';
   @Input() usersAnswers: Answers[] = [];
-  @Input() usersAnswers2: Answers[] = new Array(150).fill({
-    id: '1', 
-    userId: 'fasdas',
-    nickName: 'asdasd asd as',
-    gameId: 'asdasdas',
-    slideId: 'asdasdasd',
-    totalPoints: 1500,
-    previousTotalPoints: 1300,
-    joinedTimeStamp: 1321321321,
-});
-  
   @Input() userAnswer!: Answers;
 
   ngOnInit(): void {
@@ -628,7 +617,7 @@ export class FinishComponent implements OnInit {
   };
 
   particlesLoaded(container: Container): void {
-    console.log(container);
+    //console.log(container);
   }
 
   async particlesInit(engine: Engine): Promise<void> {

@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from '../app.state';
-import { Game, GameStatus, SlidesToPlay } from '../create-game/create-game.state';
+import { Game, GameStatus, GameTimeAndStatus, SlidesToPlay } from '../create-game/create-game.state';
 import * as CreateGameActions from './game.actions';
-import { selectAllUsersAnswers, selectAllUsersAnswersSortedByJoinTime, selectAllUsersAnswersSortedByRanking, selectCurrentSlide, selectCurrentSlideId, selectCurrentUserAnswers, selectCurrentUserAnswersId, selectDisabledAnswers, selectGame, selectGameSlides, selectGameTimeStamp, selectStateSlides } from './game.selectors';
+import { selectAllUsersAnswers, selectAllUsersAnswersSortedByJoinTime, selectAllUsersAnswersSortedByRanking, selectCurrentSlide, selectCurrentSlideId, selectCurrentUserAnswers, selectCurrentUserAnswersId, selectDisabledAnswers, selectGame, selectGameId, selectGameSlides, selectGameStatus, selectGameTimeStamp, selectLoading, selectStateSlides, selectStatusTimeAndCurrentSlideId } from './game.selectors';
 import * as GameActions from './game.actions';
 import { Answers } from './game.state';
 
@@ -45,8 +45,20 @@ export class GameFacadeService {
     return this.store.select(selectGame);
   }
 
+  public selectCurrentGameId(): Observable<string> {
+    return this.store.select(selectGameId);
+  }
+
+  public selectStatusTimeAndCurrentSlideId(): Observable<GameTimeAndStatus> {
+    return this.store.select(selectStatusTimeAndCurrentSlideId);
+  }
+
   public selectCurrentGameTimeStamp(): Observable<number> {
     return this.store.select(selectGameTimeStamp);
+  }
+
+  public selectCurrentGameStatus(): Observable<GameStatus | null> {
+    return this.store.select(selectGameStatus);
   }
 
   public selectDisabledAnswers(): Observable<boolean> {
@@ -92,4 +104,11 @@ export class GameFacadeService {
     return this.store.select(selectGameTimeStamp);
   }
 
+  public selectGameStatus(): Observable<GameStatus | null> {
+    return this.store.select(selectGameStatus);
+  }
+
+  public selectLoading(): Observable<boolean> {
+    return this.store.select(selectLoading);
+  }
 }
