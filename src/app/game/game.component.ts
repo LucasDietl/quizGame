@@ -29,8 +29,9 @@ export class GameComponent extends DestroyableComponent implements OnInit {
     public gameStatus = GameStatus;
     public slideType = SlideType;
     public currentSlideId$!: Observable<string>;
-    public status$!:Observable<GameStatus | null>;
+    public status$!: Observable<GameStatus | null>;
     public loading: boolean = true;
+    public isOwnerOfGame: boolean = false;
 
     constructor(private route: ActivatedRoute, private userFacadeService: UserFacadeService, private gameFacadeService: GameFacadeService) {
         super();
@@ -55,24 +56,34 @@ export class GameComponent extends DestroyableComponent implements OnInit {
         this.disableAnswers$ = this.gameFacadeService.selectDisabledAnswers();
         this.userAnswer$ = this.gameFacadeService.selectCurrentUserAnswer();
         this.timeStamp$ = this.gameFacadeService.selectGameTimeStamp();
-        this.status$ = this.gameFacadeService.selectGameStatus(); 
+        this.status$ = this.gameFacadeService.selectGameStatus();
         this.allUsersAnswers$ = this.gameFacadeService.selectAllUsersAnswersByJoinTime();
-        this.allUsersAnswersRanking$ = this.gameFacadeService.selectAllUsersAnswersByRanking()
-        this.gameFacadeService.selectLoading().pipe(takeUntil(this.destroyed$)).subscribe(loading => {
-            console.log({loading})
-            this.loading = loading;
+        this.allUsersAnswersRanking$ = this.gameFacadeService.selectAllUsersAnswersByRanking();
+        this.gameFacadeService.selectIsOwnerOfGame().pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(isOwner => {
+            this.isOwnerOfGame = isOwner;
         });
+
+        this.gameFacadeService.selectLoading()
+            .pipe(
+                takeUntil(this.destroyed$)
+            ).subscribe(loading => {
+                this.loading = loading;
+            });
     }
 
     public selectedOption(option: SlideOptions, slideId: string, points: number = 0) {
-        const pointsToAdd = option.isCorrect ? points : 0;
-        this.gameFacadeService.setUserAnswer(pointsToAdd, slideId);
+        if(!this.isOwnerOfGame){
+            const pointsToAdd = option.isCorrect ? points : 0;
+            this.gameFacadeService.setUserAnswer(pointsToAdd, slideId);
+        }
     }
 
     public timeIsUp(event: void): void {
         this.gameFacadeService.setIsDisableAnswer(true);
     }
-    trackBy(index: number, item: Answers): string {
+    public trackBy(index: number, item: Answers): string {
         return item.userId;
     }
 }

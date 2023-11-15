@@ -1,8 +1,8 @@
 <h2 class="shadow-text title"> 
     {{title}}
 </h2>
-<div class="you shadow-text">
-    Tus puntos: <span class="points">{{userAnswer.totalPoints}}</span>
+<div *ngIf="userAnswer" class="you shadow-text">
+    Tus puntos: <span class="points">{{userAnswer?.totalPoints}}</span>
 </div>
 
 <div class="shadow-text ranking-list">
@@ -22,8 +22,8 @@
                     {{ i + 1 }}
                 </span>
             </div>
-            <div class="name">{{ answer.nickName }}</div>
-            <div class="points">{{ answer.totalPoints }}</div>
+            <div class="name">{{ answer?.nickName }}</div>
+            <div class="points">{{ answer?.totalPoints }}</div>
         </ng-container>
     </div>
 </div>

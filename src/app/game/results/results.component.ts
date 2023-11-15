@@ -10,7 +10,7 @@ import { faTrophy, faMedal } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent extends DestroyableComponent implements OnInit {
-  @Input() userAnswer!: Answers;
+  @Input() userAnswer: Answers | null = null;
   @Input() users!: User[];
   @Input() allUsersAnswers!: Answers[];
   @Input() title: string = '';

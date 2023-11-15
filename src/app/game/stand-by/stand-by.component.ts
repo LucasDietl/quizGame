@@ -19,4 +19,21 @@ export class StandByComponent {
   @Input() nickName: string = '';
   @Input() title: string = '';
   @Input() connectedUsers: Answers[] = [];
+
+constructor(){
+  // For Testing
+  // setInterval(() => {
+  //   this.connectedUsers.unshift({
+  //     id: '1', 
+  //     userId: '1',
+  //     nickName: 'Nombre',
+  //     gameId: '1',
+  //     slideId: '1',
+  //     totalPoints: 150,
+  //     previousTotalPoints: 150,
+  //     joinedTimeStamp: 150,
+  // });
+  // }, 1500);
+}
+
 }

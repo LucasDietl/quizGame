@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot, UrlTree, Ro
 import { GameService } from '../services/game.service';
 import { UserFacadeService } from '../store/user/user-facade.service';
 import { first } from 'rxjs/operators';
+import { Game } from '../store/create-game/create-game.state';
 
 export const GameGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const gameService: GameService = inject(GameService);
@@ -13,17 +14,21 @@ export const GameGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
     if(gameId){
         let answerPresent: boolean = false;
         let gameExists: boolean = false;
+        let foundGame: Game = {} as any;
         const answersPresent = await gameService.userAnswerCheck(gameId, userId);
         if(answersPresent.length !== 0){
             answerPresent = true;
         }
         const docInstance = gameService.gameIdExists(gameId);
-        await docInstance.then(gameFound => {
-            gameExists = gameFound
+        await docInstance.then(({exists, game}) => {
+            gameExists = exists;
+            foundGame = game;
+            
         }).catch(err => {
             gameExists = false;
         });
-        return gameExists && answerPresent ? true : router.navigate(['/joinGame']);
+        const isOwner = foundGame?.ownerId === userId;
+        return isOwner || gameExists && answerPresent ? true : router.navigate(['/joinGame']);
     }
     return router.navigate(['/joinGame']);
 };

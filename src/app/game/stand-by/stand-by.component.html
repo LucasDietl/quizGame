@@ -13,12 +13,16 @@
 <p class="shadow-text waiting">Vamos a esperar a que todos <br> se conecten</p>
 <div class="connected-users" *ngIf="connectedUsers as connectedUser">
     <p class="shadow-text connected-title"> <span class="connected-number">{{connectedUser.length}}</span> jugadores </p>
-    <div [@fadeIn] class="connected-user shadow-text" *ngFor="let user of connectedUser;index as i; trackBy:trackBy;">
-        <div class="position">
-            {{ connectedUser?.length - i ?? 'xx'}}º 
-        </div>
-        <div class="name">
-            {{user.nickName}} 
-        </div>
+    <div class="connected-user-list">
+        <ng-container *ngFor="let user of connectedUser;index as i; trackBy:trackBy;">
+            <div *ngIf="i <= 15" [@fadeIn] class="connected-user shadow-text" >
+                <div class="position">
+                    {{ connectedUser?.length - i ?? 'xx'}}º 
+                </div>
+                <div class="name">
+                    {{user.nickName}} 
+                </div>
+            </div>
+        </ng-container>
     </div>
 </div>

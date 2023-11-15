@@ -151,10 +151,10 @@ export class GameService {
         return updateDoc(answerDocInstance, { totalPoints: increment(points), previousTotalPoints: increment(points), slideId })
     }
 
-    public async gameIdExists(gameId: string): Promise<boolean> {
+    public async gameIdExists(gameId: string): Promise<{exists: boolean, game: Game}> {
         const gameDocInstance = doc(this.firestore, collectionNames.games, gameId);
         const game = await getDoc(gameDocInstance);
-        return game.exists();
+        return { exists: game.exists(), game: game.data() as Game};
     }
 
     public async userAnswerCheck(gameId: string, userId: string): Promise<Answers[]> {

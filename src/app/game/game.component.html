@@ -1,17 +1,15 @@
 <ng-container *ngIf="user$ | async as user">
     <ng-container *ngIf="game$ | async as game">
         <ng-container *ngIf="status$ | async as status">
-            <div class="wrapper container game-wrapper" [ngSwitch]="status">
-                <div *ngSwitchCase="gameStatus.standBy">
+            <div class="container game-wrapper" [ngSwitch]="status">
+                <div class="stand-by" *ngSwitchCase="gameStatus.standBy">
                     <qz-stand-by [title]="game.title" [nickName]="user.nickName" [connectedUsers]="allUsersAnswers$ | async"></qz-stand-by>
                 </div>
-                <div *ngSwitchCase="gameStatus.inProgress">
+                <div class="in-progress" *ngSwitchCase="gameStatus.inProgress">
                     <ng-container *ngIf="currentSlide$ | async as currentSlide">
                         <ng-container *ngIf="currentSlide.type === slideType.results">
                             <ng-container *ngIf="allUsersAnswersRanking$ | async as allUsersAnswersRanking">
-                                <ng-container *ngIf="userAnswer$ | async as userAnswer">
-                                    <qz-results [title]="currentSlide.title" [userAnswer]="userAnswer" [allUsersAnswers]="allUsersAnswersRanking"></qz-results>
-                                </ng-container>
+                                <qz-results [title]="currentSlide.title" [userAnswer]="userAnswer$ | async" [allUsersAnswers]="allUsersAnswersRanking"></qz-results>
                             </ng-container>
                         </ng-container>
                         <div class="quiz-wrapper" *ngIf="currentSlide.type === slideType.quiz || currentSlide.type === slideType.aOrB">
@@ -24,7 +22,7 @@
                             </div>
                             <div *ngIf="!loading" class="options-wrapper">
                                 <ng-container *ngFor="let option of currentSlide.options; index as j">
-                                    <qz-game-option [color]="j === 0 ? 'red': j === 1 ? 'blue' : j === 2 ? 'yellow' : 'green'"  [isDisabled]="disableAnswers$ | async" [text]="option.title" (selected)="selectedOption(option, currentSlide.id ,currentSlide.points)"></qz-game-option>
+                                    <qz-game-option [color]="j === 0 ? 'red': j === 1 ? 'blue' : j === 2 ? 'yellow' : 'green'"  [isDisabled]="(disableAnswers$ | async) && !isOwnerOfGame" [text]="option.title" (selected)="selectedOption(option, currentSlide.id ,currentSlide.points)"></qz-game-option>
                                 </ng-container>
                             </div>
                         </div>
@@ -33,12 +31,12 @@
                         </div>
                     </ng-container>
                 </div>
-                <ng-container *ngSwitchCase="gameStatus.finished">
+                <div class="finished" *ngSwitchCase="gameStatus.finished">
                     <qz-finish [nickName]="user.nickName" [usersAnswers]="allUsersAnswersRanking$ | async" [userAnswer]="userAnswer$ | async"></qz-finish>
-                </ng-container>
-            </div>
-            <div *ngIf="user?.id === game.ownerId">
-                <qz-owner-controls [status]="status" [currentSlideId]="currentSlideId$ | async" [game]="game" [user]="user"></qz-owner-controls>
+                </div>
+                <div class="owner-controls" *ngIf="isOwnerOfGame">
+                    <qz-owner-controls [status]="status" [currentSlideId]="currentSlideId$ | async" [game]="game" [user]="user"></qz-owner-controls>
+                </div>
             </div>
         </ng-container>
         

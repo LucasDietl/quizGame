@@ -10,6 +10,11 @@ export const selectGame = createSelector(
   (state) => state.game
 );
 
+export const selectIsOwnerOfGame = createSelector(
+  selectGame,
+  selectUserId,
+  (game, userId) => game?.ownerId === userId
+);
 export const selectLoading = createSelector(
   selectGameState,
   (state) => state.loading

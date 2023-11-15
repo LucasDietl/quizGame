@@ -1,5 +1,6 @@
 .title{
     margin : 0 auto;
+    margin-top: 28px;
     font-family: "bungee",sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -43,6 +44,10 @@ h2{
     100% { content: ''; }
 }
 .connected-users {
+    .connected-user-list{
+        max-height: 50vh;
+        overflow: hidden;
+    }
     .connected-title{
         margin-bottom: 8px;
         .connected-number{

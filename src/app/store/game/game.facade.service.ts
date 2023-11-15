@@ -1,12 +1,28 @@
-import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from '../app.state';
 import { Game, GameStatus, GameTimeAndStatus, SlidesToPlay } from '../create-game/create-game.state';
 import * as CreateGameActions from './game.actions';
-import { selectAllUsersAnswers, selectAllUsersAnswersSortedByJoinTime, selectAllUsersAnswersSortedByRanking, selectCurrentSlide, selectCurrentSlideId, selectCurrentUserAnswers, selectCurrentUserAnswersId, selectDisabledAnswers, selectGame, selectGameId, selectGameSlides, selectGameStatus, selectGameTimeStamp, selectLoading, selectStateSlides, selectStatusTimeAndCurrentSlideId } from './game.selectors';
 import * as GameActions from './game.actions';
+import {
+  selectAllUsersAnswers,
+  selectAllUsersAnswersSortedByJoinTime,
+  selectAllUsersAnswersSortedByRanking, selectCurrentSlide,
+  selectCurrentSlideId, 
+  selectCurrentUserAnswers, 
+  selectCurrentUserAnswersId, 
+  selectDisabledAnswers, 
+  selectGame, 
+  selectGameId, 
+  selectGameSlides, 
+  selectGameStatus, 
+  selectGameTimeStamp, 
+  selectIsOwnerOfGame, 
+  selectLoading, 
+  selectStateSlides, 
+  selectStatusTimeAndCurrentSlideId
+} from './game.selectors';
 import { Answers } from './game.state';
 
 
@@ -18,11 +34,11 @@ export class GameFacadeService {
   }
 
   public getGameById(gameId: string): void {
-    this.store.dispatch(CreateGameActions.getCurrentGameById({gameId}));
+    this.store.dispatch(CreateGameActions.getCurrentGameById({ gameId }));
   }
 
   public changeGameStatus(gameStatus: GameStatus, gameId: string): void {
-    this.store.dispatch(GameActions.changeGameStatus({gameStatus, gameId}));
+    this.store.dispatch(GameActions.changeGameStatus({ gameStatus, gameId }));
   }
 
   public setNextSlideId(): void {
@@ -30,15 +46,15 @@ export class GameFacadeService {
   }
 
   public getAllUsersAnswers(gameId: string): void {
-    this.store.dispatch(GameActions.getAllUsersAnswers({gameId}));
+    this.store.dispatch(GameActions.getAllUsersAnswers({ gameId }));
   }
 
   public setUserAnswer(points: number, slideId: string): void {
-    this.store.dispatch(GameActions.setUserAnswer({points, slideId}));
+    this.store.dispatch(GameActions.setUserAnswer({ points, slideId }));
   }
 
   public setIsDisableAnswer(isDisabled: boolean): void {
-    this.store.dispatch(GameActions.setIsDisableAnswer({isDisabled}));
+    this.store.dispatch(GameActions.setIsDisableAnswer({ isDisabled }));
   }
 
   public selectCurrentGame(): Observable<Game | null> {
@@ -81,22 +97,22 @@ export class GameFacadeService {
     return this.store.select(selectCurrentSlide);
   }
 
-  public selectCurrentUserAnswer(): Observable<Answers>{
+  public selectCurrentUserAnswer(): Observable<Answers> {
     return this.store.select(selectCurrentUserAnswers);
   }
 
-  public selectAllUsersAnswers(): Observable<Answers[]>{
+  public selectAllUsersAnswers(): Observable<Answers[]> {
     return this.store.select(selectAllUsersAnswers);
   }
 
-  public selectAllUsersAnswersByJoinTime(): Observable<Answers[]>{
+  public selectAllUsersAnswersByJoinTime(): Observable<Answers[]> {
     return this.store.select(selectAllUsersAnswersSortedByJoinTime);
   }
-  public selectAllUsersAnswersByRanking(): Observable<Answers[]>{
+  public selectAllUsersAnswersByRanking(): Observable<Answers[]> {
     return this.store.select(selectAllUsersAnswersSortedByRanking);
   }
 
-  public selectCurrentUserAnswerId(): Observable<string>{
+  public selectCurrentUserAnswerId(): Observable<string> {
     return this.store.select(selectCurrentUserAnswersId);
   }
 
@@ -111,4 +127,9 @@ export class GameFacadeService {
   public selectLoading(): Observable<boolean> {
     return this.store.select(selectLoading);
   }
+
+  public selectIsOwnerOfGame(): Observable<boolean> {
+    return this.store.select(selectIsOwnerOfGame);
+  }
+
 }
