@@ -66,9 +66,6 @@ export class CreateGameComponent extends DestroyableComponent implements OnInit 
       title: 'New Game',
       slides: [],
       ownerId: this.userId,
-      // status: GameStatus.standBy,
-      // answers: [],
-      // currentSlide: '',
     };
     const id = await this.createGameFacadeService.createGame(newGame);
     this.setGameById(id);
@@ -84,15 +81,15 @@ export class CreateGameComponent extends DestroyableComponent implements OnInit 
     let newSlide: SlidesToCreate = {
       type,
       gameId: this.selectedGame.id,
-      title: 'New Slide Question or title',
-      description: 'New Slide description',
+      title: '',
+      description: '',
       order
     }
     switch (type) {
       case SlideType.aOrB:
       case SlideType.quiz:
         const amount = type === this.slideType.quiz ? 4 : type === this.slideType.aOrB ? 2: 0;
-        const options = new Array(amount).fill({ title: 'Add answer or title', isCorrect: false});
+        const options = new Array(amount).fill({ title: '', isCorrect: false});
         newSlide = { ...newSlide,
           seconds: 15,
           points: 100,

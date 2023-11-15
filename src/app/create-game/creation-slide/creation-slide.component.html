@@ -1,47 +1,57 @@
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>{{type}}</mat-card-title>
-    <mat-card-subtitle>Order {{ index + 1 }}</mat-card-subtitle>
-  </mat-card-header>
-  <img class="preview" *ngIf="imageUrlPreview" mat-card-image [src]="imageUrlPreview" alt="">
-  <mat-card-content>
-    <div [formGroup]="slideForm">
-      <h4></h4>
-      <mat-form-field>
-        <mat-label>Image Url</mat-label>
-        <input matInput formControlName="imageUrl" placeholder="Image URL">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Slide question / name</mat-label>
-        <input matInput formControlName="title" placeholder="Slide Title">
-      </mat-form-field>
-      <mat-form-field *ngIf="type === slideType.answer">
-        <mat-label>Slide description</mat-label>
-        <input matInput formControlName="description" placeholder="Description">
-      </mat-form-field>
-      <ng-container *ngIf="screenSize$ | async as screenSize">
-        <mat-grid-list [cols]="screenSize === screenSizeNames.XSmall || screenSize === screenSizeNames.Small ? 1 : 2" rowHeight="4:1" formArrayName="options">
-          <ng-container *ngFor="let option of slideForm.get('options').controls; let j = index">
-            <mat-grid-tile>
-              <qz-creation-slide-option [option]="option"></qz-creation-slide-option>
-            </mat-grid-tile>
-          </ng-container>
-        </mat-grid-list>
-      </ng-container>
-      
-
-    </div>
-  </mat-card-content>
-  <mat-card-actions>
-    <button *ngIf="!areYouSure" mat-fab color="basic" aria-label="delete"  type="button" (click)="handleDelete()">
-      <mat-icon>delete</mat-icon>
-    </button>
-    <button *ngIf="areYouSure" mat-fab color="warn" aria-label="delete"  type="button" (click)="makeSure()">
-      <mat-icon>delete</mat-icon>
-    </button>
-    <button *ngIf="areYouSure" mat-fab color="basic" aria-label="delete"  type="button" (click)="cancel()">
-      <mat-icon>cancel</mat-icon>
-    </button>
-  </mat-card-actions>
-</mat-card>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{type}}
+    </mat-panel-title>
+    <mat-panel-description>
+      Order {{ index + 1 }}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card>
+    <mat-card-header>
+      <!-- <mat-card-title>{{type}}</mat-card-title>
+      <mat-card-subtitle>Order {{ index + 1 }}</mat-card-subtitle> -->
+    </mat-card-header>
+    <img class="preview" *ngIf="imageUrlPreview" mat-card-image [src]="imageUrlPreview" alt="">
+    <mat-card-content>
+      <div [formGroup]="slideForm">
+        <h4></h4>
+        <mat-form-field>
+          <mat-label>Image Url</mat-label>
+          <input matInput formControlName="imageUrl" placeholder="Image URL">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Slide question / name</mat-label>
+          <input matInput formControlName="title" placeholder="Slide Title">
+        </mat-form-field>
+        <mat-form-field *ngIf="type === slideType.answer">
+          <mat-label>Slide description</mat-label>
+          <input matInput formControlName="description" placeholder="Description">
+        </mat-form-field>
+        <ng-container *ngIf="screenSize$ | async as screenSize">
+          <mat-grid-list [cols]="screenSize === screenSizeNames.XSmall || screenSize === screenSizeNames.Small ? 1 : 2" rowHeight="4:1" formArrayName="options">
+            <ng-container *ngFor="let option of slideForm.get('options').controls; let j = index">
+              <mat-grid-tile>
+                <qz-creation-slide-option [option]="option"></qz-creation-slide-option>
+              </mat-grid-tile>
+            </ng-container>
+          </mat-grid-list>
+        </ng-container>
+        
+  
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button *ngIf="!areYouSure" mat-fab color="basic" aria-label="delete"  type="button" (click)="handleDelete()">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button *ngIf="areYouSure" mat-fab color="warn" aria-label="delete"  type="button" (click)="makeSure()">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button *ngIf="areYouSure" mat-fab color="basic" aria-label="delete"  type="button" (click)="cancel()">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</mat-expansion-panel>

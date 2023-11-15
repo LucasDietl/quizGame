@@ -1,41 +1,49 @@
-<div class="wrapper center">
-    <h1 class="mat-title">Game creation</h1>
-    <!-- <h2 class="mat-subheading">Edit existing one (soon)</h2> -->
-    <button *ngIf="!selectedGame" mat-raised-button color="secondary" type="button"(click)="createNewGame()">Create new</button>
-    
-
-    <div class="center slides-wrapper container" *ngIf="selectedGame as game">
-        <p *ngIf="game?.slides?.length === 0"> Add new slides to start </p>
-        <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.quiz)">Add Quiz </button>
-        <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.aOrB)">Add A/B </button>
-        <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.results)">Add results</button>
-        <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.answer)">Add answer</button>
-        <button mat-raised-button class="slide-option" color="warn" type="button" (click)="deleteGame()">Delete Game</button>
-        <button mat-raised-button class="slide-option" color="secondary" type="button" (click)="goToGame()">Start Game</button>
-
-
-        <form [formGroup]="gameForm" (ngSubmit)="onSubmit()">
-            <mat-form-field class="game-title">
-                <mat-label>Game Title</mat-label>
-                <input matInput formControlName="title" placeholder="Game Title">
-            </mat-form-field>
-            
-            <div formArrayName="slides">
-                <div *ngFor="let slide of getSlides().controls; let i = index" [formGroupName]="i" class="slides-container">
-                    <qz-creation-slide (deleteSlide)="deleteSlide($event, i)" [slideForm]="slide" [index]="i" ></qz-creation-slide>
+<ng-container *ngIf="games$ | async as games">
+    <ng-container *ngIf="selectedGame as game"> 
+        <mat-drawer-container class="example-container">
+            <mat-drawer mode="side" opened>
+                <div class="side-buttons">
+                    <p *ngIf="game?.slides?.length === 0"> Add new slides to start </p>
+                    <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.quiz)">Add Quiz </button>
+                    <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.aOrB)">Add A/B </button>
+                    <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.answer)">Add answer</button>
+                    <button mat-raised-button class="slide-option" color="primary" type="button"(click)="addNewSlide(slideType.results)">Add results</button>
+                    <button mat-raised-button class="slide-option" color="warn" type="button" (click)="deleteGame()">Delete Game</button>
+                    <button mat-raised-button class="slide-option" color="secondary" type="button" (click)="goToGame()">Start Game</button>
                 </div>
-            </div>
-        
-            <button mat-raised-button type="submit">Submit</button>
-        </form>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div *ngFor="let game of games$ | async">
-        <div (click)="setGameById(game.id)">{{game.title}}</div>
-    </div>
-</div>
+                <h3 class="shadow-text" *ngIf="games?.length"> Your games:</h3>
+                <div *ngFor="let singleGame of games">
+                    <div class="shadow-text" (click)="setGameById(singleGame.id)">{{singleGame.title}}</div>
+                </div>
+            </mat-drawer>
+            <mat-drawer-content>
+                <div class="wrapper center">
+                  <h1 class="mat-title">Game creation</h1>
+                  <h2 class="mat-subheading">Edit existing one (soon)</h2>
+                  <button *ngIf="!selectedGame" mat-raised-button color="secondary" type="button"(click)="createNewGame()">Create new</button>
+                  
+                
+                  <div class="center slides-wrapper container" *ngIf="game">
+                      <form [formGroup]="gameForm" (ngSubmit)="onSubmit()">
+                          <mat-form-field class="game-title">
+                              <mat-label>Game Title</mat-label>
+                              <input matInput formControlName="title" placeholder="Game Title">
+                          </mat-form-field>
+                          
+                          <div formArrayName="slides">
+                              <div *ngFor="let slide of getSlides().controls; let i = index" [formGroupName]="i" class="slides-container">
+                                  <qz-creation-slide (deleteSlide)="deleteSlide($event, i)" [slideForm]="slide" [index]="i" ></qz-creation-slide>
+                              </div>
+                          </div>
+                      
+                          <button mat-raised-button type="submit">Submit</button>
+                      </form>
+                  </div>
+                </div>
+            </mat-drawer-content>
+        </mat-drawer-container>
+    </ng-container>
+</ng-container>
+
+
+

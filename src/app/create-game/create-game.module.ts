@@ -20,6 +20,8 @@ import { CreationSlideOptionComponent } from './creation-slide-option/creation-s
 import { CreationSlideComponent } from './creation-slide/creation-slide.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 
@@ -47,6 +49,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatCardModule,
     MatIconModule,
     MatDividerModule,
+    MatExpansionModule,
+    MatSidenavModule
   ],
   exports: [
     CreateGameComponent,

@@ -1,3 +1,14 @@
+.side-buttons{
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: column;
+    .slide-option{
+        margin: 6px 0;
+        width: 100%;
+    }
+
+}
+
 .wrapper {
     display: flex;
     flex-direction: column;
@@ -9,10 +20,6 @@
         flex-direction: column;
         max-width: 800px;
         width: 100%;
-        .slide-option{
-            margin: 6px 0;
-            width: 100%;
-        }
         form{
             width: 100%;
         }
