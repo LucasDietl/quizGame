@@ -8,12 +8,16 @@ import { UserFacadeService } from '../store/user/user-facade.service';
 export const UserIdGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> => {
   const userFacadeService: UserFacadeService = inject(UserFacadeService); 
   const router: Router = inject(Router);
+  const gameId =  route?.firstChild?.params?.id;
+  if(gameId){
+    localStorage.setItem('GameIdToJoin', gameId);
+  }
   return userFacadeService.userId().pipe(
     map((userId) => {
       if (userId) {
         return true;
       } else {
-        return router.createUrlTree(['/joinGame']);
+        return router.createUrlTree(['']);
       }
     })
   );

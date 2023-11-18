@@ -23,6 +23,7 @@ export const GameGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
         await docInstance.then(({exists, game}) => {
             gameExists = exists;
             foundGame = game;
+            localStorage.setItem('GameIdToJoin', game.id);
             
         }).catch(err => {
             gameExists = false;

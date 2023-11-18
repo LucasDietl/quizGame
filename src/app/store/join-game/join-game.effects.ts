@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { from, of } from 'rxjs';
-import { tap, withLatestFrom } from 'rxjs/operators';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { JoinGameService } from 'src/app/services/join-game.service';
 import { openDialog } from '../dialog/dialog.actions';
-import * as JoinGameActions from './join-game.actions';
-import { JoinGameFacadeService } from './join-game.facade.service';
 import { UserFacadeService } from '../user/user-facade.service';
-import { Router } from '@angular/router';
+import * as JoinGameActions from './join-game.actions';
 
 @Injectable()
 export class JoinGameEffects {

@@ -1,0 +1,15 @@
+:host {
+    .qr-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Adjust the height to fit your layout */
+      }
+      
+      .qr-code {
+        max-width: 80%; /* Adjust the maximum width of the QR code */
+        max-height: 80vh; /* Adjust the maximum height of the QR code */
+        width: auto;
+        height: auto;
+      }
+}

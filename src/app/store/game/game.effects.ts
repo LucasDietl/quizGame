@@ -71,7 +71,7 @@ export class GameEffects {
                     catchError((_) => of(openDialog({ title: 'Error changing game status' })))
                 );
             }),
-            catchError((_) => { debugger;return of(openDialog({ title: 'Error changing game status Effect' }))})
+            catchError((_) => of(openDialog({ title: 'Error changing game status Effect' })))
         )
     );
 

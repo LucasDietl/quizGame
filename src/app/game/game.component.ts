@@ -1,15 +1,13 @@
-import { selectGameStatus } from './../store/game/game.selectors';
 import { Component, OnInit } from '@angular/core';
-import { DestroyableComponent } from '../utils/destroyable/destroyable.component';
 import { ActivatedRoute } from '@angular/router';
-import { UserFacadeService } from '../store/user/user-facade.service';
-import { GameFacadeService } from '../store/game/game.facade.service';
+import { Observable } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
 import { Game, GameStatus, SlideOptions, SlideType, SlidesToPlay } from '../store/create-game/create-game.state';
-import { AuthUser } from '../store/user/user.interface';
+import { GameFacadeService } from '../store/game/game.facade.service';
 import { Answers } from '../store/game/game.state';
-import { GameService } from '../services/game.service';
+import { UserFacadeService } from '../store/user/user-facade.service';
+import { AuthUser } from '../store/user/user.interface';
+import { DestroyableComponent } from '../utils/destroyable/destroyable.component';
 
 @Component({
     selector: 'qz-game',
@@ -44,7 +42,6 @@ export class GameComponent extends DestroyableComponent implements OnInit {
             this.gameFacadeService.getGameById(gameId);
             this.gameFacadeService.getAllUsersAnswers(this.gameId);
             this.setObservables();
-
         });
     }
 

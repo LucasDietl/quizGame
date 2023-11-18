@@ -40,7 +40,6 @@ export class OwnerControlsComponent extends DestroyableComponent implements OnIn
             if (currentSlideId && status === GameStatus.inProgress && allAnswers?.length) {
                 const allAnswered = allAnswers.every((answer) => answer.slideId === currentSlideId);
                 if (allAnswered) {
-                    debugger;
                     this.gameFacadeService.setNextSlideId();
                 }
             }

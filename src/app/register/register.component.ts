@@ -66,7 +66,9 @@ export class RegisterComponent implements OnInit {
         this.isLoading = false;
         formDirective.resetForm();
         this.registrationForm.reset();
-        this.router.navigate(['joinGame'])
+        const gameId = localStorage.getItem('GameIdToJoin');
+        const url = gameId ? `joinGame/${gameId}` : 'joinGame'
+        this.router.navigate([url])
       }).catch((err) => {
         this.isLoading = false;
         console.error(err);
@@ -80,7 +82,6 @@ export class RegisterComponent implements OnInit {
   getData(): void {
     const collectionInstance = collection(this.firestore, collectionNames.users);
     collectionData(collectionInstance, { idField: 'id' }).subscribe((data) => {
-      console.log('List of users', data);
       this.users = data as AuthUser[];
     });
   }

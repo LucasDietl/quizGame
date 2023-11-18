@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { MatDialogModule } from '@angular/material/dialog';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -16,10 +16,12 @@ import { DialogModule } from './dialog/dialog.module';
 import { RegisterModule } from './register/register.module';
 import { rootReducers } from './store/reducers';
 import { UserModule } from './store/user/user-store.module';
+import { NoPageFoundComponent } from './no-page-found/no-page-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    NoPageFoundComponent,
     ],
   imports: [
     BrowserModule,

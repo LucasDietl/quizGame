@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { DialogFacadeService } from '../store/dialog/dialog-facade.service';
-import { UserFacadeService } from '../store/user/user-facade.service';
-import { AuthUser } from '../store/user/user.interface';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { DestroyableComponent } from '../utils/destroyable/destroyable.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, first } from 'rxjs';
 import { JoinGameFacadeService } from '../store/join-game/join-game.facade.service';
-import { JoinGameService } from '../services/join-game.service';
+import { DestroyableComponent } from '../utils/destroyable/destroyable.component';
 
 @Component({
   selector: 'qz-join-game',
@@ -22,10 +17,8 @@ export class JoinGameComponent extends DestroyableComponent implements OnInit{
   constructor(
     private fb: FormBuilder, 
     private router: Router,
-    private firestore: Firestore, 
-    private userFacadeService: UserFacadeService,
-    private joinGameService: JoinGameService,
-    private joinGameFacadeService: JoinGameFacadeService
+    private joinGameFacadeService: JoinGameFacadeService,
+    private route: ActivatedRoute
     ) {
       super();
     this.joinGameForm = this.fb.group({
@@ -35,6 +28,13 @@ export class JoinGameComponent extends DestroyableComponent implements OnInit{
 
   ngOnInit(): void {
     this.isLoading$ = this.joinGameFacadeService.selectLoading();
+    this.route.params.pipe(first()).subscribe(async params => {
+      const gameId = params['id'];
+      if (gameId) {
+
+        this.joinGameForm.setValue({ gameId});
+      }
+    });
   }
 
   public joinGame(formDirective: FormGroupDirective): void {

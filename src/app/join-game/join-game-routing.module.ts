@@ -6,7 +6,11 @@ import { JoinGameComponent } from './join-game.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':id',
+    component: JoinGameComponent
+  },
+  {
+    path: '**',
     component: JoinGameComponent
   }
 ];
