@@ -1,20 +1,21 @@
 :host{
     display: flex;
     overflow-y: scroll;
-    background-image: url("/assets/images/disneyPattern.jpeg");
-    background-size: contain;
-    background-repeat: repeat;
+    // background-image: url("/assets/images/disneyPattern.jpeg");
+    // background-size: contain;
+    // background-repeat: repeat;
     padding: 20px;
     height: calc(100% - 40px);
     max-height: calc(100% - 40px);
 
-    // background-color: #0F4D84;
-    // background-image:
-    // repeating-linear-gradient(120deg, rgba(255,255,255,.1), transparent 1px, transparent 10000px),
-    // repeating-linear-gradient(60deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 1px, transparent 1px, transparent 10000px),
-    // linear-gradient(60deg,rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1)),
-    // linear-gradient(120deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1));
-    // background-size: 180px 305px;
+    background-color: #0F4D84;
+    background-image:
+    repeating-linear-gradient(120deg, rgba(255,255,255,.1), transparent 1px, transparent 10000px),
+    repeating-linear-gradient(60deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 1px, transparent 1px, transparent 10000px),
+    linear-gradient(60deg,rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1)),
+    linear-gradient(120deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1));
+    background-size: 180px 305px;
+    overflow: hidden;
     .game-wrapper{
         margin: 0 auto;
         width: 100%;
@@ -35,7 +36,7 @@
         position: relative;
         .title{
             margin : 0 auto;
-            font-family: "bungee",sans-serif;
+            font-family: 'Archivo Black', "bungee",sans-serif;
             font-style: normal;
             font-weight: 400;
             color:white;
@@ -73,6 +74,50 @@
             width: 100%;
             margin-bottom: 10px;
         }
+    }
+
+    @media only screen and (min-width: 768px) {
+        .game-wrapper{
+            max-width: 70vw;
+            .owner-controls{
+                max-width: 300px;
+                position: absolute;
+                top: 0;
+                right: 16px;
+            }
+        }
+        .quiz-wrapper{
+            position: relative;
+            .title{
+                margin: 16px 0 32px 0;
+                font-size: 50px;
+                line-height: 55px;
+                letter-spacing: 2px;
+                text-shadow: none;
+
+            }
+        }
+        .preview{
+            max-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img {
+                border-radius: 16px;
+                max-width: 100%;
+                max-height: 45vh;
+            }
+        }
+        .options-wrapper{
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            qz-game-option {
+                width: 45%;
+                margin-bottom: 10px;
+            }
+        }
+
     }
 }
 

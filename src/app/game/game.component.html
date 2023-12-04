@@ -13,7 +13,7 @@
                             </ng-container>
                         </ng-container>
                         <div class="quiz-wrapper" *ngIf="currentSlide.type === slideType.quiz || currentSlide.type === slideType.aOrB">
-                            <h3 class="title">{{ currentSlide.title }}</h3>
+                            <h3 class="title shadow-text">{{ currentSlide.title }}</h3>
                             <div  *ngIf="currentSlide.imageUrl" class="preview">
                                 <img id="tv" [src]="currentSlide.imageUrl" alt="game image">
                             </div>

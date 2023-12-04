@@ -5,6 +5,7 @@ import { Game, GameStatus } from 'src/app/store/create-game/create-game.state';
 import { GameFacadeService } from 'src/app/store/game/game.facade.service';
 import { AuthUser } from 'src/app/store/user/user.interface';
 import { DestroyableComponent } from 'src/app/utils/destroyable/destroyable.component';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'qz-owner-controls',
@@ -16,6 +17,7 @@ export class OwnerControlsComponent extends DestroyableComponent implements OnIn
     @Input() user!: AuthUser;
     @Input() currentSlideId!: string;
     @Input() status!: GameStatus;
+    public faAngleRight = faAngleRight;
 
 
     public gameStatus = GameStatus;

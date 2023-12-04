@@ -1,5 +1,7 @@
 <qz-game-option *ngIf="status === gameStatus.standBy" [isDisabled]="false" color='blue' text="Start game" (selected)="startGame()"></qz-game-option>
 <ng-container *ngIf="lastSlideId !== currentSlideId">
-<qz-game-option *ngIf="status === gameStatus.inProgress" [isDisabled]="false" color='green' text="Next slide" (selected)="setNextSlide()"></qz-game-option>
+    <button *ngIf="status === gameStatus.inProgress" class="round-button" (click)="setNextSlide()">
+        <fa-icon [icon]="faAngleRight"></fa-icon>
+    </button>
 </ng-container>
 <qz-game-option *ngIf="lastSlideId === currentSlideId" [isDisabled]="false" color= 'red' text="Finish Game" (selected)="finishGame()"></qz-game-option>

@@ -1,0 +1,12 @@
+:host{
+    .round-button {
+        width: 40px; /* Adjust the size as needed */
+        height: 40px; /* Adjust the size as needed */
+        border-radius: 50%; /* Makes the button round */
+        border: none;
+        color: white;
+        background-color: #cccccc27; /* Set your desired background color */
+        cursor: pointer;
+        margin-top: 32px;
+      }
+}
