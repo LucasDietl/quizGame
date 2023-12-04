@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "startDev": "ng serve --configuration=development",
-    "startDevHost": "ng serve --host 192.168.5.101 --port 4200 --disable-host-check --configuration=development"
+    "startDevHost": "ng serve --host 192.168.5.101 --port 4200 --disable-host-check --configuration=development",
+    "deploy":"firebase deploy --only hosting"
   },
   "private": true,
   "dependencies": {

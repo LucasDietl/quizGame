@@ -7,6 +7,6 @@ export const environment = {
     authDomain: 'solelu-6a898.firebaseapp.com',
     messagingSenderId: '754598418874',
   },
-  url: 'http://localhost:4200',
+  url: 'https://solelu-6a898.web.app',
   production: true
 };
