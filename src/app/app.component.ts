@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, first, takeUntil, tap } from 'rxjs/operators';
 import { CommonFacadeService } from './store/common/common-facade.service';
 import { DialogFacadeService } from './store/dialog/dialog-facade.service';
+import { screenSizeNames } from './utils/helpers/screen-size-names';
 
 @Component({
   selector: 'qz-root',
@@ -60,7 +61,7 @@ export class AppComponent implements OnInit {
       .subscribe((state: BreakpointState) => {
         for (const [breakpoint, label] of this.displayNameMap) {
           if (state.breakpoints[breakpoint]) {
-            this.commonFacadeService.setScreenSize(label);
+            this.commonFacadeService.setScreenSize(label as screenSizeNames);
             break;
           }
         }

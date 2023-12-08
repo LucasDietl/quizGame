@@ -49,8 +49,8 @@ export class StandByComponent {
           image: {
             gif: true,
             height: 200,
-            // src: "https://particles.js.org/images/mario.gif",
-            src: "/assets/images/woody-buzz.png",
+            src: "https://particles.js.org/images/mario.gif",
+            // src: "/assets/images/woody-buzz.png",
             width: 200
           }
         },
@@ -69,18 +69,18 @@ export class StandByComponent {
 constructor(private commonFacadeService: CommonFacadeService){
   this.screenSize$ = this.commonFacadeService.selectScreenSize();
   // For Testing
-  setInterval(() => {
-    this.connectedUsers.unshift({
-      id: '1', 
-      userId: '1',
-      nickName: 'Nombre',
-      gameId: '1',
-      slideId: '1',
-      totalPoints: 150,
-      previousTotalPoints: 150,
-      joinedTimeStamp: 150,
-  });
-  }, 1500);
+  // setInterval(() => {
+  //   this.connectedUsers.unshift({
+  //     id: '1', 
+  //     userId: '1',
+  //     nickName: 'Nombre',
+  //     gameId: '1',
+  //     slideId: '1',
+  //     totalPoints: 150,
+  //     previousTotalPoints: 150,
+  //     joinedTimeStamp: 150,
+  // });
+  // }, 1500);
 }
 
 particlesLoaded(container: Container): void {

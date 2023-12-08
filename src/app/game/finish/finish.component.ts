@@ -1,14 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs';
+import { CommonFacadeService } from 'src/app/store/common/common-facade.service';
 import { Answers } from 'src/app/store/game/game.state';
+import { DestroyableComponent } from 'src/app/utils/destroyable/destroyable.component';
+import { screenSizeNames } from 'src/app/utils/helpers/screen-size-names';
+import { loadFull } from "tsparticles";
 import {
-  MoveDirection,
   ClickMode,
-  HoverMode,
-  OutMode,
   Container,
   Engine,
+  HoverMode,
+  MoveDirection,
+  OutMode,
 } from "tsparticles-engine";
-import { loadFull } from "tsparticles"; 
 
 @Component({
   selector: 'qz-finish',
@@ -16,14 +20,20 @@ import { loadFull } from "tsparticles";
   styleUrls: ['./finish.component.scss'],
   animations: []
 })
-export class FinishComponent implements OnInit {
+export class FinishComponent extends DestroyableComponent {
   @Input() nickName: string = '';
   @Input() usersAnswers: Answers[] = [];
   @Input() userAnswer!: Answers;
+  public amountToShow: number = 10; 
+  public screenSizeNames = screenSizeNames;
 
-  ngOnInit(): void {
-    
+  constructor(private commonFacadeService: CommonFacadeService) {
+    super();
+    this.commonFacadeService.selectScreenSize().pipe(takeUntil(this.destroyed$)).subscribe((size)=>{
+      this.amountToShow = size === screenSizeNames.XSmall || size === screenSizeNames.Small ? 200 : 10;
+    });
   }
+
 
   bueno = {
     fpsLimit: 60,

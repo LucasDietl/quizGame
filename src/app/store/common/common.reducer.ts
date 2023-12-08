@@ -2,11 +2,12 @@ import { ActionReducer, createReducer, on } from '@ngrx/store';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import * as CommonActions from './common.actions';
 import { CommonSate } from './common.state';
+import { screenSizeNames } from 'src/app/utils/helpers/screen-size-names';
 
 
 export const commonStateKey = '@common';
 export const initialCommonState: CommonSate = {
-    screenSize: '',
+    screenSize: screenSizeNames.Small,
 };
 
 export const commonReducer = createReducer(

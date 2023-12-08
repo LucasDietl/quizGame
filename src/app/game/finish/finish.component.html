@@ -1,11 +1,11 @@
 <ng-particles
   id="fireworks"
-  [options]="mario"
+  [options]="bueno"
   [particlesInit]="particlesInit"
   (particlesLoaded)="particlesLoaded($event)"
 ></ng-particles>
 <div>
-    <h2 class="shadow-text title"> ¡ Ganadores ! </h2>
+    <div class="shadow-text title"> ¡ Ganadores ! </div>
 </div>
 <div class="shadow-text podium-container">
     <ng-container *ngFor="let answer of usersAnswers; index as i">
@@ -18,7 +18,7 @@
 </div>
 <div class="general-container">
     <ng-container  *ngFor="let user of usersAnswers; index as i">
-        <div  *ngIf="i > 2" class="general-users shadow-text">
+        <div  *ngIf="i > 2 && i < amountToShow" class="general-users shadow-text">
             <div class="general-position">
                 {{ i + 1 ?? 'xx'}}º 
             </div>
