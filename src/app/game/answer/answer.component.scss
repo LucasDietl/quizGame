@@ -2,34 +2,46 @@
     position: relative;
     .title{
         margin : 0 auto;
-        font-family: "bungee",sans-serif;
+        margin-bottom: 24px;
+        font-size: 24px;
+        line-height: 28px;
+        font-family: 'Archivo Black', "bungee",sans-serif;
         font-style: normal;
         font-weight: 400;
         color:white;
-        text-shadow: -1px 0 1px #582E00, 
-                    1px 0 1px #582E00,
-                    0 -1px 1px #582E00,
-                    0 4px 1px #582E00,
-                    -2px 4px 1px #582E00,
-                    2px 3px 2px #582E00;
+        text-shadow: none;
         text-align: center;
-        margin-bottom: 16px;
-    }
-    .timer{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 16px;
     }
     .preview{
+        display: flex;
+        justify-content: center;
         max-width: 500px;
-        margin-bottom: 16px;
+        margin: 0 auto;
+        margin-bottom: 24px;
         img {
             border-radius: 16px;
             max-width: 100%;
         }
     }
     .description{
-        
+        font-size: 18px;
+        line-height: 22px;
+    }
+    @media only screen and (min-width: 768px) {
+        .title{
+            margin: 16px 0 32px 0;
+            font-size: 50px;
+            line-height: 55px;
+            letter-spacing: 2px;
+            text-shadow: none;
+
+        }
+        .preview{
+            margin-bottom: 34px;
+        }
+        .description{
+            font-size: 26px;
+            line-height: 30px;
+        }
     }   
 }

@@ -1,28 +1,37 @@
-<h1 class="title">
-    {{ title }}
-</h1>
-<br>
-<h2 class="shadow-text"> 
-    ¡Hola {{nickName}}!
+<ng-container *ngIf="screenSize$ | async as screenSize">
+    <ng-particles
+        *ngIf="screenSize !== screenSizeNames.XSmall && screenSize !== screenSizeNames.Small"
+        id="fireworks"
+        [options]="mario"
+        [particlesInit]="particlesInit"
+        (particlesLoaded)="particlesLoaded($event)"
+    ></ng-particles>
     
-</h2>
-<h2 class="shadow-text">
-    ¿Estás listo para jugar?
-</h2>
-
-<p class="shadow-text waiting">Vamos a esperar a que todos <br> se conecten</p>
-<div class="connected-users" *ngIf="connectedUsers as connectedUser">
-    <p class="shadow-text connected-title"> <span class="connected-number">{{connectedUser.length}}</span> jugadores </p>
-    <div class="connected-user-list">
-        <ng-container *ngFor="let user of connectedUser;index as i; trackBy:trackBy;">
-            <div *ngIf="i <= 15" [@fadeIn] class="connected-user shadow-text" >
-                <div class="position">
-                    {{ connectedUser?.length - i ?? 'xx'}}º 
+    <h1 class="title">
+        {{ title }}
+    </h1>
+    
+    <h3 *ngIf="!isOwner" class="shadow-text"> 
+        ¡Hola {{nickName}}!
+    </h3>
+    <h3 *ngIf="isOwner" class="shadow-text">
+        ¿Estás listo para jugar?
+    </h3>
+    
+    <p class="shadow-text waiting">Vamos a esperar a que todos <br *ngIf="screenSize === screenSizeNames.XSmall && screenSize === screenSizeNames.Small"> se conecten</p>
+    <div class="connected-users" *ngIf="connectedUsers as connectedUser">
+        <p class="shadow-text connected-title"> <span class="connected-number">{{connectedUser.length}}</span> jugadores </p>
+        <div class="connected-user-list">
+            <ng-container *ngFor="let user of connectedUser;index as i; trackBy:trackBy;">
+                <div *ngIf="i <= 25" [@fadeIn] class="connected-user shadow-text" >
+                    <!-- <div class="position">
+                        {{ connectedUser?.length - i ?? 'xx'}} 
+                    </div> -->
+                    <div class="name">
+                        {{user.nickName}} 
+                    </div>
                 </div>
-                <div class="name">
-                    {{user.nickName}} 
-                </div>
-            </div>
-        </ng-container>
+            </ng-container>
+        </div>
     </div>
-</div>
+</ng-container>

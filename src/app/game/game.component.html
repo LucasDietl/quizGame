@@ -3,7 +3,7 @@
         <ng-container *ngIf="status$ | async as status">
             <div class="container game-wrapper" [ngSwitch]="status">
                 <div class="stand-by" *ngSwitchCase="gameStatus.standBy">
-                    <qz-stand-by [title]="game.title" [nickName]="user.nickName" [connectedUsers]="allUsersAnswers$ | async"></qz-stand-by>
+                    <qz-stand-by [isOwner]="isOwnerOfGame" [title]="game.title" [nickName]="user.nickName" [connectedUsers]="allUsersAnswers$ | async"></qz-stand-by>
                 </div>
                 <div class="in-progress" *ngSwitchCase="gameStatus.inProgress">
                     <ng-container *ngIf="currentSlide$ | async as currentSlide">
@@ -14,7 +14,7 @@
                         </ng-container>
                         <div class="quiz-wrapper" *ngIf="currentSlide.type === slideType.quiz || currentSlide.type === slideType.aOrB">
                             <h3 class="title shadow-text">{{ currentSlide.title }}</h3>
-                            <div  *ngIf="currentSlide.imageUrl" class="preview">
+                            <div *ngIf="currentSlide?.imageUrl" class="preview">
                                 <img id="tv" [src]="currentSlide.imageUrl" alt="game image">
                             </div>
                             <div class="timer" *ngIf="timeStamp$ | async as timeStamp">

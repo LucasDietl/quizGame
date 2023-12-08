@@ -1,20 +1,12 @@
 :host{
     display: flex;
     overflow-y: scroll;
-    // background-image: url("/assets/images/disneyPattern.jpeg");
-    // background-size: contain;
-    // background-repeat: repeat;
+    background-image: url("/assets/images/disneyPattern.jpeg");
+    background-size: contain;
+    background-repeat: repeat;
     padding: 20px;
     height: calc(100% - 40px);
     max-height: calc(100% - 40px);
-
-    background-color: #0F4D84;
-    background-image:
-    repeating-linear-gradient(120deg, rgba(255,255,255,.1), transparent 1px, transparent 10000px),
-    repeating-linear-gradient(60deg, rgba(255,255,255,.1), rgba(255,255,255,.1) 1px, transparent 1px, transparent 10000px),
-    linear-gradient(60deg,rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1)),
-    linear-gradient(120deg, rgba(0,0,0,.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1));
-    background-size: 180px 305px;
     overflow: hidden;
     .game-wrapper{
         margin: 0 auto;
@@ -27,7 +19,6 @@
             flex-grow: 1;
             overflow-y: auto;
         }
-
         .owner-controls{
             flex-shrink: 2;
         }
@@ -36,18 +27,15 @@
         position: relative;
         .title{
             margin : 0 auto;
+            margin-bottom: 24px;
+            font-size: 24px;
+            line-height: 28px;
             font-family: 'Archivo Black', "bungee",sans-serif;
             font-style: normal;
             font-weight: 400;
             color:white;
-            text-shadow: -1px 0 1px #582E00, 
-                        1px 0 1px #582E00,
-                        0 -1px 1px #582E00,
-                        0 4px 1px #582E00,
-                        -2px 4px 1px #582E00,
-                        2px 3px 2px #582E00;
+            text-shadow: none;
             text-align: center;
-            margin-bottom: 16px;
         }
         .timer{
             display: flex;
@@ -57,12 +45,7 @@
         }
     }
     .preview{
-        max-width: 500px;
-        margin-bottom: 16px;
-        img {
-            border-radius: 16px;
-            max-width: 100%;
-        }
+        display: none;
     }
     
     .options-wrapper{
@@ -85,6 +68,9 @@
                 top: 0;
                 right: 16px;
             }
+            .stand-by {
+                overflow: hidden;
+            }
         }
         .quiz-wrapper{
             position: relative;
@@ -102,6 +88,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 24px;
             img {
                 border-radius: 16px;
                 max-width: 100%;
