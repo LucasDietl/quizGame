@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TimeService } from 'src/app/services/time.service';
@@ -11,13 +11,11 @@ import { DestroyableComponent } from 'src/app/utils/destroyable/destroyable.comp
 })
 export class TimerComponent extends DestroyableComponent {
     private countdownSubscription!: Subscription;
-    remainingTime: number = 0;
-    private timeStamp: number = 0;
+    public remainingTime: number = 0;
     @Output() timeIsUp: EventEmitter<void> = new EventEmitter();
     @Input() set time(value: { timeStamp: number, seconds: number }) {
         if (value) {
             const { timeStamp, seconds } = value;
-            this.timeStamp = value.timeStamp;
 
             const remainingSeconds = this.timeService.getTimeDifferenceInSeconds(timeStamp, seconds);
             if (remainingSeconds > 0) {

@@ -8,6 +8,7 @@ import { Answers } from '../store/game/game.state';
 import { UserFacadeService } from '../store/user/user-facade.service';
 import { AuthUser } from '../store/user/user.interface';
 import { DestroyableComponent } from '../utils/destroyable/destroyable.component';
+import { TimeService } from '../services/time.service';
 
 @Component({
     selector: 'qz-game',
@@ -31,7 +32,11 @@ export class GameComponent extends DestroyableComponent implements OnInit {
     public loading: boolean = true;
     public isOwnerOfGame: boolean = false;
 
-    constructor(private route: ActivatedRoute, private userFacadeService: UserFacadeService, private gameFacadeService: GameFacadeService) {
+    constructor(
+        private route: ActivatedRoute,
+        private userFacadeService: UserFacadeService,
+        private gameFacadeService: GameFacadeService,
+        private timeService: TimeService) {
         super();
     }
 
@@ -52,27 +57,31 @@ export class GameComponent extends DestroyableComponent implements OnInit {
         this.currentSlideId$ = this.gameFacadeService.selectCurrentSlideId();
         this.disableAnswers$ = this.gameFacadeService.selectDisabledAnswers();
         this.userAnswer$ = this.gameFacadeService.selectCurrentUserAnswer();
-        this.timeStamp$ = this.gameFacadeService.selectGameTimeStamp();
         this.status$ = this.gameFacadeService.selectGameStatus();
         this.allUsersAnswers$ = this.gameFacadeService.selectAllUsersAnswersByJoinTime();
         this.allUsersAnswersRanking$ = this.gameFacadeService.selectAllUsersAnswersByRanking();
+        this.timeStamp$ = this.gameFacadeService.selectGameTimeStamp();
         this.gameFacadeService.selectIsOwnerOfGame().pipe(
             takeUntil(this.destroyed$)
         ).subscribe(isOwner => {
             this.isOwnerOfGame = isOwner;
         });
 
-        this.gameFacadeService.selectLoading()
-            .pipe(
-                takeUntil(this.destroyed$)
-            ).subscribe(loading => {
-                this.loading = loading;
-            });
+        this.gameFacadeService.selectLoading().pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(loading => {
+            this.loading = loading;
+        });
     }
 
-    public selectedOption(option: SlideOptions, slideId: string, points: number = 0) {
-        if(!this.isOwnerOfGame){
-            const pointsToAdd = option.isCorrect ? points : 0;
+    public selectedOption(option: SlideOptions, slideId: string, currentSlide: SlidesToPlay, timeStamp: number) {
+        if (!this.isOwnerOfGame) {
+            const points = currentSlide?.points || 1;
+            const seconds = currentSlide?.seconds || 1;
+            const remainingSeconds = this.timeService.getTimeDifferenceInSeconds(timeStamp, seconds);
+            const minPoints = Math.round(points * 0.05);
+            const speedPoints = Math.max((remainingSeconds / seconds * points), minPoints);
+            const pointsToAdd = option.isCorrect ? Math.round(speedPoints) : 0;
             this.gameFacadeService.setUserAnswer(pointsToAdd, slideId);
         }
     }

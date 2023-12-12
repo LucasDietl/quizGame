@@ -17,14 +17,17 @@
                             <div *ngIf="currentSlide?.imageUrl" class="preview">
                                 <img id="tv" [src]="currentSlide.imageUrl" alt="game image">
                             </div>
-                            <div class="timer" *ngIf="timeStamp$ | async as timeStamp">
-                                <qz-timer *ngIf="timeStamp !== null && currentSlide?.seconds !== null" [time]="{timeStamp: timeStamp, seconds: currentSlide?.seconds || 0}" (timeIsUp)="timeIsUp($event)" ></qz-timer>
-                            </div>
-                            <div *ngIf="!loading" class="options-wrapper">
-                                <ng-container *ngFor="let option of currentSlide.options; index as j">
-                                    <qz-game-option [color]="j === 0 ? 'red': j === 1 ? 'blue' : j === 2 ? 'yellow' : 'green'"  [isDisabled]="(disableAnswers$ | async) && !isOwnerOfGame" [text]="option.title" (selected)="selectedOption(option, currentSlide.id ,currentSlide.points)"></qz-game-option>
-                                </ng-container>
-                            </div>
+                            <ng-container *ngIf="timeStamp$ | async as timeStamp">
+                                <div *ngIf="!loading" class="timer">
+                                    <qz-timer *ngIf="timeStamp !== null && currentSlide?.seconds !== null" [time]="{timeStamp: timeStamp, seconds: currentSlide?.seconds || 0}" (timeIsUp)="timeIsUp($event)" ></qz-timer>
+                                </div>
+                                <div *ngIf="!loading" class="options-wrapper">
+                                    <ng-container *ngFor="let option of currentSlide.options; index as j">
+                                        <qz-game-option [color]="j === 0 ? 'red': j === 1 ? 'blue' : j === 2 ? 'yellow' : 'green'"  [isDisabled]="(disableAnswers$ | async) && !isOwnerOfGame" [text]="option.title" (selected)="selectedOption(option, currentSlide.id ,currentSlide, timeStamp)"></qz-game-option>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                            
                         </div>
                         <div class="quiz-wrapper" *ngIf="currentSlide.type === slideType.answer" >
                             <qz-answer [title]="currentSlide.title" [imageUrl]="currentSlide.imageUrl" [description]="currentSlide.description"></qz-answer>

@@ -11,8 +11,6 @@ export class TimeService {
         if (timeDifferenceInSeconds >= 0) {
             return  timeDifferenceInSeconds > seconds ? seconds : timeDifferenceInSeconds;
         } else {
-            console.log('else case', 0);
-
             return 0;
         }
     }
