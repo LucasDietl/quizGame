@@ -8,9 +8,7 @@
                 <div class="in-progress" *ngSwitchCase="gameStatus.inProgress">
                     <ng-container *ngIf="currentSlide$ | async as currentSlide">
                         <ng-container *ngIf="currentSlide.type === slideType.results">
-                            <ng-container *ngIf="allUsersAnswersRanking$ | async as allUsersAnswersRanking">
-                                <qz-results [title]="currentSlide.title" [userAnswer]="userAnswer$ | async" [allUsersAnswers]="allUsersAnswersRanking"></qz-results>
-                            </ng-container>
+                            <qz-results [title]="currentSlide.title" [userAnswer]="userAnswer$ | async" [isOwner]="isOwnerOfGame" [gameId]="gameId"></qz-results>
                         </ng-container>
                         <div class="quiz-wrapper" *ngIf="currentSlide.type === slideType.quiz || currentSlide.type === slideType.aOrB">
                             <h3 class="title shadow-text">{{ currentSlide.title }}</h3>
@@ -35,7 +33,7 @@
                     </ng-container>
                 </div>
                 <div class="finished" *ngSwitchCase="gameStatus.finished">
-                    <qz-finish [nickName]="user.nickName" [usersAnswers]="allUsersAnswersRanking$ | async" [userAnswer]="userAnswer$ | async"></qz-finish>
+                    <qz-finish [isOwner]="isOwnerOfGame" [gameId]="gameId" [nickName]="user.nickName" [userAnswer]="userAnswer$ | async"></qz-finish>
                 </div>
                 <div class="owner-controls" *ngIf="isOwnerOfGame">
                     <qz-owner-controls [status]="status" [currentSlideId]="currentSlideId$ | async" [game]="game" [user]="user"></qz-owner-controls>

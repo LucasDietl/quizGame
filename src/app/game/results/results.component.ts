@@ -1,41 +1,50 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { faMedal, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { GameFacadeService } from 'src/app/store/game/game.facade.service';
 import { Answers } from 'src/app/store/game/game.state';
-import { User } from 'src/app/store/user/user.interface';
-import { DestroyableComponent } from 'src/app/utils/destroyable/destroyable.component';
 
 @Component({
   selector: 'qz-results',
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss']
 })
-export class ResultsComponent extends DestroyableComponent {
+export class ResultsComponent implements OnInit, OnDestroy {
   @Input() userAnswer: Answers | null = null;
-  @Input() users!: User[];
-  @Input() allUsersAnswers!: Answers[];
+  @Input() isOwner: boolean = false;
+  @Input() gameId!: string;
   @Input() title: string = '';
-  faTrophy = faTrophy;
-  faMedal = faMedal;
-  algo = 10;
-  constructor(){
-    super();
-    // For Testing
-    // setInterval(() => {
-    //   this.algo ++;
-    //   this.allUsersAnswers.unshift({
-    //     id: `${this.algo}`, 
-    //     userId: '1',
-    //     nickName: 'Nombre',
-    //     gameId: '1',
-    //     slideId: '1',
-    //     totalPoints: 150,
-    //     previousTotalPoints: 150,
-    //     joinedTimeStamp: 150,
-    // });
-    // }, 1500);
+  public faTrophy = faTrophy;
+  public faMedal = faMedal;
+  public allUsersAnswersRanking$ = this.gameFacadeService.selectAllUsersAnswersByRanking();
+  // public allUsersAnswersRanking$ = of([{
+  //   id: `${1}`,
+  //   userId: '1',
+  //   nickName: 'Nombre',
+  //   gameId: '1',
+  //   slideId: '1',
+  //   totalPoints: 150,
+  //   previousTotalPoints: 150,
+  //   joinedTimeStamp: 150,
+  // }
+  // ]);
+
+
+  constructor(private gameFacadeService: GameFacadeService) {
+  }
+
+  ngOnInit(): void {
+    if (!this.isOwner) {
+      this.gameFacadeService.getAllUsersAnswersOnce(this.gameId);
+    }
   }
 
   public trackBy(index: number, item: Answers): any {
     return item.userId;
+  }
+
+  ngOnDestroy(): void {
+    if (!this.isOwner) {
+      this.gameFacadeService.removeAllUserAnswers();
+    }
   }
 }

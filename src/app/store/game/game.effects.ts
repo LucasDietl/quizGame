@@ -13,11 +13,11 @@ import { GameFacadeService } from './game.facade.service';
 @Injectable()
 export class GameEffects {
     constructor(
-        private actions$: Actions, 
-        private gameService: GameService, 
-        private slidesService: SlidesService, 
-        private gameFacadeService: GameFacadeService, 
-        private userFacadeService: UserFacadeService, 
+        private actions$: Actions,
+        private gameService: GameService,
+        private slidesService: SlidesService,
+        private gameFacadeService: GameFacadeService,
+        private userFacadeService: UserFacadeService,
         private timeService: TimeService) { }
 
     getGameById$ = createEffect(() =>
@@ -32,6 +32,37 @@ export class GameEffects {
             }),
         )
     );
+
+    getAllUserAnswers$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(GameActions.getCurrentGameByIdSuccess),
+            withLatestFrom(this.userFacadeService.userId()),
+            map(([{ game }, userId]) => {
+                const { ownerId } = game;
+                const gameId = game.id;
+                const owner = ownerId === userId;
+                return owner ? GameActions.getAllUsersAnswers({ gameId, ownerId }) : GameActions.getAllUsersAnswersNotNeeded();
+            }),
+        )
+    );
+
+    getAllUserAnswersOnce$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(GameActions.getAllUsersAnswersOnce),
+        switchMap(({ gameId }) => {
+            return from(this.gameService.getAllUserAnswersOnce(gameId)).pipe(
+                map((answers) => { 
+                    return GameActions.getAllUsersAnswersOnceSuccess({answers});
+                }),
+                catchError((error) => { 
+                    debugger;
+                    console.log(error);
+                    
+                    return of(openDialog({ title: 'Error Getting all user answers Once' }))})
+            )
+        }),
+    )
+);
 
     getSlidesByGameIdOnce$ = createEffect(() =>
         this.actions$.pipe(
@@ -58,8 +89,6 @@ export class GameEffects {
         )
     );
 
-
-
     changeGameStatus$ = createEffect(() =>
         this.actions$.pipe(
             ofType(GameActions.changeGameStatus),
@@ -79,41 +108,24 @@ export class GameEffects {
         this.actions$.pipe(
             ofType(GameActions.setNextSlideId),
             withLatestFrom(this.gameFacadeService.selectGameSlides(), this.gameFacadeService.selectCurrentGameId(), this.gameFacadeService.selectCurrentSlideId()),
-            switchMap(([ _, slides, gameId, currentSlideId]) => {
+            switchMap(([_, slides, gameId, currentSlideId]) => {
                 const slideId = this.gameService.getNextSlideId(currentSlideId, slides);
                 return from(this.gameService.setCurrentSlide(gameId, slideId)).pipe(
                     map(() => GameActions.setNextSlideIdSuccess()),
                     catchError((_) => of(openDialog({ title: 'Error changing slides' })))
                 );
             }),
-            catchError((_)=> of(openDialog({ title: 'Error on setNextSlide' })))
+            catchError((_) => of(openDialog({ title: 'Error on setNextSlide' })))
         )
     );
-
-    // gameStartedHandler$ = createEffect(() =>
-    //     this.actions$.pipe(
-    //         ofType(GameActions.getGameTimeAndStatusSuccess),
-    //         withLatestFrom(this.gameFacadeService.selectGameSlides(), this.gameFacadeService.selectCurrentGameId()),
-    //         switchMap(([{data}, slides, gameId]) => {
-    //             debugger
-    //             const slideId = this.gameService.getNextSlideId(data.currentSlideId, slides);
-    //             return from(this.gameService.setCurrentSlide(gameId, slideId)).pipe(
-    //                 map(() => GameActions.setNextSlideIdSuccess()),
-    //                 catchError((_) => of(openDialog({ title: 'Error changing game status' })))
-    //             );
-    //         }),
-    //         catchError((_)=> of(openDialog({ title: 'Error on gameStartedHandler' })))
-    //     )
-    // );
 
     getAllUsersAnswers$ = createEffect(() =>
         this.actions$.pipe(
             ofType(GameActions.getAllUsersAnswers),
-            withLatestFrom(this.userFacadeService.userId()),
-            switchMap(([{ gameId }, userId]) => {
+            switchMap(({ gameId }) => {
                 return this.gameService.getAllUserAnswersByGameIdCall(gameId).pipe(
-                    map((answers) => GameActions.getAllUsersAnswersSuccess({ answers, userId })),
-                    catchError((_) => of(openDialog({ title: 'Error changing game status' })))
+                    map((answers) => GameActions.getAllUsersAnswersSuccess({ answers })),
+                    catchError((_) => of(openDialog({ title: 'Error getting all user answers' })))
                 );
             }),
         )
@@ -136,14 +148,12 @@ export class GameEffects {
         this.actions$.pipe(
             ofType(GameActions.getGameTimeAndStatusSuccess),
             withLatestFrom(this.gameFacadeService.selectStatusTimeAndCurrentSlideId(), this.gameFacadeService.selectStateGameSlides(), this.gameFacadeService.selectCurrentUserAnswer()),
-            filter(([,,slides]) => slides?.length !== 0),
+            filter(([, , slides]) => slides?.length !== 0),
             debounceTime(300),
             switchMap(([, data, slides, userAnswer]) => {
                 const slide = slides.find(slide => slide.id === data?.currentSlideId);
                 const alreadyAnswered = slide?.id === userAnswer?.slideId;
                 const noTimeRemaining = (this.timeService.getTimeDifferenceInSeconds(data?.timeStamp as number, slide?.seconds as number) ?? 0) <= 0;
-                // console.log({alreadyAnswered});
-                // console.log({noTimeRemaining});
                 return of(GameActions.setIsDisableAnswer({ isDisabled: alreadyAnswered || noTimeRemaining }));
             }),
         )

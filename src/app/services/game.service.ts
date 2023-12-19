@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentData, Firestore, QuerySnapshot, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, writeBatch } from '@angular/fire/firestore';
+import { DocumentData, Firestore, QuerySnapshot, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, limit, onSnapshot, orderBy, query, serverTimestamp, setDoc, startAfter, updateDoc, where, writeBatch } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { collectionNames } from 'src/app/utils/helpers/collection-names';
 import { Game, GameStatus, GameTimeAndStatus, SlidesToPlay } from '../store/create-game/create-game.state';
@@ -18,8 +18,6 @@ export class GameService {
     public async getGameByIdOnce(gameId: string): Promise<Game> {
         const gameInstance = doc(this.firestore, collectionNames.games, gameId);
         const gameDoc = await getDoc(gameInstance);
-        // const fireStoreDateData: { seconds: number, nanoseconds: number } = gameDoc.data()?.timeStamp;
-        // const timeStamp = fireStoreDateData ? this.generateTimeStamp(fireStoreDateData) : 0;
         const { title, ownerId, slides, answers } = gameDoc.data() as Game;
         const game: Game = { id: gameDoc.id, title, ownerId, slides, answers };
         return game;
@@ -44,10 +42,10 @@ export class GameService {
     public getCurrentSlideIdAndTimeStamp(gameId: string): Observable<GameTimeAndStatus> {
         return new Observable((observer) => {
             const unsubscribe = onSnapshot(doc(this.firestore, collectionNames.status, gameId), (doc) => {
-                const fireStoreDateData: { seconds: number, nanoseconds: number } = doc.data()?.timeStamp ?? { seconds: 0, nanoseconds: 0};
+                const fireStoreDateData: { seconds: number, nanoseconds: number } = doc.data()?.timeStamp ?? { seconds: 0, nanoseconds: 0 };
                 const timeStamp = this.generateTimeStamp(fireStoreDateData);
                 const { currentSlideId, status } = doc.data() as GameTimeAndStatus;
-                const gameStatus: GameTimeAndStatus = { currentSlideId, status, timeStamp};
+                const gameStatus: GameTimeAndStatus = { currentSlideId, status, timeStamp };
 
                 observer.next(gameStatus);
             });
@@ -84,7 +82,7 @@ export class GameService {
 
     public async createGame(game: Partial<Game>): Promise<string> {
         const collectionInstance = collection(this.firestore, collectionNames.games);
-        const gameToCreate = { ...game,  };
+        const gameToCreate = { ...game, };
         const data = await addDoc(collectionInstance, gameToCreate);
         const gameId = data.id;
         const statusToCreate = { currentSlideId: '', status: GameStatus.standBy, timeStamp: serverTimestamp() };
@@ -141,7 +139,7 @@ export class GameService {
 
     public setCurrentSlide(gameId: string, slideId: string): Promise<void> {
         const statusInstance = doc(this.firestore, collectionNames.status, gameId);
-        const currentSlideUpdate: Partial<GameTimeAndStatus> = slideId === '' ? { currentSlideId: slideId, status: GameStatus.finished}: { currentSlideId: slideId };
+        const currentSlideUpdate: Partial<GameTimeAndStatus> = slideId === '' ? { currentSlideId: slideId, status: GameStatus.finished } : { currentSlideId: slideId };
         const status = { timeStamp: serverTimestamp(), ...currentSlideUpdate };
         return updateDoc(statusInstance, status);
     }
@@ -151,10 +149,10 @@ export class GameService {
         return updateDoc(answerDocInstance, { totalPoints: increment(points), previousTotalPoints: increment(points), slideId })
     }
 
-    public async gameIdExists(gameId: string): Promise<{exists: boolean, game: Game}> {
+    public async gameIdExists(gameId: string): Promise<{ exists: boolean, game: Game }> {
         const gameDocInstance = doc(this.firestore, collectionNames.games, gameId);
         const game = await getDoc(gameDocInstance);
-        return { exists: game.exists(), game: game.data() as Game};
+        return { exists: game.exists(), game: game.data() as Game };
     }
 
     public async userAnswerCheck(gameId: string, userId: string): Promise<Answers[]> {
@@ -170,7 +168,6 @@ export class GameService {
 
     public getAllUserAnswersByGameIdCall(gameId: string): Observable<Answers[]> {
         const answersInstance = collection(this.firestore, collectionNames.answers);
-        // orderBy("totalPoints", "desc")
         const q = query(answersInstance, where('gameId', FireStoreOperators.EQ, gameId));
         return new Observable((observer) => {
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -184,15 +181,27 @@ export class GameService {
     }
 
     private handleAnswerQuerySnapshot(querySnapshot: QuerySnapshot<DocumentData>): Answers[] {
-    const answers: Answers[] = [];
-    querySnapshot.forEach((doc) => {
-        const fireStoreDateData: { seconds: number, nanoseconds: number } = doc.data()?.joinedTimeStamp;
-        const joinedTimeStamp = this.generateTimeStamp(fireStoreDateData);
-        const { totalPoints, previousTotalPoints, gameId, userId, slideId, nickName } = doc.data();
-        const answer = { id: doc.id, totalPoints, previousTotalPoints, gameId, userId, slideId, nickName, joinedTimeStamp };
-        answers.push(answer);
-    });
-    return answers;
-}
+        const answers: Answers[] = [];
+        querySnapshot.forEach((doc) => {
+            const fireStoreDateData: { seconds: number, nanoseconds: number } = doc.data()?.joinedTimeStamp;
+            const joinedTimeStamp = this.generateTimeStamp(fireStoreDateData);
+            const { totalPoints, previousTotalPoints, gameId, userId, slideId, nickName } = doc.data();
+            const answer = { id: doc.id, totalPoints, previousTotalPoints, gameId, userId, slideId, nickName, joinedTimeStamp };
+            answers.push(answer);
+        });
+        return answers;
+    }
+
+    public async getAllUserAnswersOnce(gameId: string): Promise<Answers[]> {
+        const answersInstance = collection(this.firestore, collectionNames.answers);
+        const q =  query(answersInstance, where('gameId', FireStoreOperators.EQ, gameId));
+        const querySnapShot = await getDocs(q);
+        const answers: Answers[] = [];
+        querySnapShot.forEach((doc) => {
+            const tempAnswer = { ...doc.data(), id: doc.id } as Answers;
+            answers.push(tempAnswer);
+        });
+        return answers;
+    }
 
 }

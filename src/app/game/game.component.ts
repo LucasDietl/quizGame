@@ -23,7 +23,6 @@ export class GameComponent extends DestroyableComponent implements OnInit {
     public currentSlide$!: Observable<SlidesToPlay | undefined>;
     public userAnswer$!: Observable<Answers>;
     public allUsersAnswers$!: Observable<Answers[]>;
-    public allUsersAnswersRanking$!: Observable<Answers[]>;
     public timeStamp$!: Observable<number>;
     public gameStatus = GameStatus;
     public slideType = SlideType;
@@ -45,7 +44,6 @@ export class GameComponent extends DestroyableComponent implements OnInit {
             const gameId = params['id'];
             this.gameId = gameId;
             this.gameFacadeService.getGameById(gameId);
-            this.gameFacadeService.getAllUsersAnswers(this.gameId);
             this.setObservables();
         });
     }
@@ -59,7 +57,6 @@ export class GameComponent extends DestroyableComponent implements OnInit {
         this.userAnswer$ = this.gameFacadeService.selectCurrentUserAnswer();
         this.status$ = this.gameFacadeService.selectGameStatus();
         this.allUsersAnswers$ = this.gameFacadeService.selectAllUsersAnswersByJoinTime();
-        this.allUsersAnswersRanking$ = this.gameFacadeService.selectAllUsersAnswersByRanking();
         this.timeStamp$ = this.gameFacadeService.selectGameTimeStamp();
         this.gameFacadeService.selectIsOwnerOfGame().pipe(
             takeUntil(this.destroyed$)

@@ -7,24 +7,26 @@
 <div>
     <div class="shadow-text title"> ¡ Ganadores ! </div>
 </div>
-<div class="shadow-text podium-container">
-    <ng-container *ngFor="let answer of usersAnswers; index as i">
-        <div *ngIf="i < 3" class="podium podium-second" [class.podium-second]="i === 1" [class.podium-first]="i === 0" [class.podium-third]="i === 2">
-            <div class="name"> {{answer.nickName}}</div>
-            <div class="position">{{i+1}}</div>
-            <div class="points">{{ answer.totalPoints }}</div>
-        </div>
-    </ng-container>
-</div>
-<div class="general-container">
-    <ng-container  *ngFor="let user of usersAnswers; index as i">
-        <div  *ngIf="i > 2 && i < amountToShow" class="general-users shadow-text">
-            <div class="general-position">
-                {{ i + 1 ?? 'xx'}}º 
+<ng-container *ngIf="allUsersAnswersRanking$ | async as usersAnswers">
+    <div class="shadow-text podium-container">
+        <ng-container *ngFor="let answer of usersAnswers; index as i">
+            <div *ngIf="i < 3" class="podium podium-second" [class.podium-second]="i === 1" [class.podium-first]="i === 0" [class.podium-third]="i === 2">
+                <div class="name"> {{answer.nickName}}</div>
+                <div class="position">{{i+1}}</div>
+                <div class="points">{{ answer.totalPoints }}</div>
             </div>
-            <div class="general-name">
-                {{user.nickName}} 
+        </ng-container>
+    </div>
+    <div class="general-container">
+        <ng-container  *ngFor="let user of usersAnswers; index as i">
+            <div  *ngIf="i > 2 && i < amountToShow" class="general-users shadow-text">
+                <div class="general-position">
+                    {{ i + 1 ?? 'xx'}}º 
+                </div>
+                <div class="general-name">
+                    {{user.nickName}} 
+                </div>
             </div>
-        </div>
-    </ng-container>
-</div>
+        </ng-container>
+    </div>
+</ng-container>

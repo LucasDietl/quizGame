@@ -39,6 +39,14 @@ export const gameReducer = createReducer(
 		...state,
 		answers: answers,
 	})),
+	on(GameActions.getAllUsersAnswersOnceSuccess, (state, { answers }) => ({
+		...state,
+		answers: [ ...state.answers, ...answers],
+	})),
+	on(GameActions.removeAllUserAnswers, (state) => ({
+		...state,
+		answers: [],
+	})),
 	on(GameActions.setUserAnswer, (state) => ({
 		...state, disableAnswers: true,
 	})),

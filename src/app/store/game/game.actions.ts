@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Game, GameStatus, GameTimeAndStatus, SlidesToPlay } from '../create-game/create-game.state';
 import { Answers } from './game.state';
-import { User } from '../user/user.interface';
 
 export const getCurrentGameById = createAction('[Game] Get game by id', props<{gameId: string}>());
 export const getCurrentGameByIdSuccess = createAction('[Game] Get game by id success', props<{game: Game}>());
@@ -16,9 +15,15 @@ export const setNextSlideId = createAction('[Game Slide] Set next slide id');
 export const setNextSlideIdSuccess = createAction('[Game Slide] Set next slide id Success');
 export const setNextSlideIdFail = createAction('[Game Slide] Set next slide id Fail', props<{ error: any }>());
 
-export const getAllUsersAnswers = createAction('[Game Answer] Get all users answers', props<{gameId: string}>());
-export const getAllUsersAnswersSuccess = createAction('[Game Answer] Get all users answers Success', props<{answers: Answers[], userId: string}>());
+export const getAllUsersAnswers = createAction('[Game Answer] Get all users answers', props<{gameId: string, ownerId: string}>());
+export const getAllUsersAnswersNotNeeded = createAction('[Game Answer] Get all users answers not needed');
+export const getAllUsersAnswersSuccess = createAction('[Game Answer] Get all users answers Success', props<{answers: Answers[]}>());
 export const getAllUsersAnswersFail = createAction('[Game Answer] Get all users answers Fail', props<{message: string}>());
+
+export const getAllUsersAnswersOnce = createAction('[Game Answer] Get all users Once answers', props<{gameId: string}>());
+export const getAllUsersAnswersOnceSuccess = createAction('[Game Answer] Get all users Once answers Success', props<{answers: Answers[]}>());
+export const getAllUsersAnswersOnceFail = createAction('[Game Answer] Get all users answers Once Fail', props<{message: string}>());
+export const removeAllUserAnswers = createAction('[Game Answer] Remove all user answers');
 
 export const setUserAnswer = createAction('[Game Answer] Set game answer', props<{points: number, slideId: string}>());
 export const setUserAnswerSuccess = createAction('[Game Answer] Set game answer Success');

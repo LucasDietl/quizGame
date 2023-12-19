@@ -45,8 +45,16 @@ export class GameFacadeService {
     this.store.dispatch(GameActions.setNextSlideId());
   }
 
-  public getAllUsersAnswers(gameId: string): void {
-    this.store.dispatch(GameActions.getAllUsersAnswers({ gameId }));
+  public getAllUsersAnswers(gameId: string, ownerId: string): void {
+    this.store.dispatch(GameActions.getAllUsersAnswers({ gameId, ownerId }));
+  }
+
+  public getAllUsersAnswersOnce(gameId: string): void {
+    this.store.dispatch(GameActions.getAllUsersAnswersOnce({ gameId }));
+  }
+
+  public removeAllUserAnswers() : void {
+    this.store.dispatch(GameActions.removeAllUserAnswers());
   }
 
   public setUserAnswer(points: number, slideId: string): void {
