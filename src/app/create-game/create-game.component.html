@@ -20,7 +20,7 @@
                 <div class="wrapper center">
                   <h1 class="mat-title">Game creation</h1>
                   <h2 class="mat-subheading">Edit existing one (soon)</h2>
-                  <button *ngIf="!selectedGame" mat-raised-button color="secondary" type="button"(click)="createNewGame()">Create new</button>
+                  <button *ngIf="selectedGame" mat-raised-button color="secondary" type="button"(click)="createNewGame()">Create new</button>
                   
                 
                   <div class="center slides-wrapper container" *ngIf="game">
