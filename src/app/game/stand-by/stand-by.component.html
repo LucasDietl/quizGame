@@ -19,7 +19,7 @@
     </h3>
     
     <p class="shadow-text waiting">Vamos a esperar a que todos <br *ngIf="screenSize === screenSizeNames.XSmall && screenSize === screenSizeNames.Small"> se conecten</p>
-    <div class="connected-users" *ngIf="connectedUsers as connectedUser">
+    <div class="connected-users" *ngIf="isOwner && connectedUsers as connectedUser">
         <p class="shadow-text connected-title"> <span class="connected-number">{{connectedUser.length}}</span> jugadores </p>
         <div class="connected-user-list">
             <ng-container *ngFor="let user of connectedUser;index as i; trackBy:trackBy;">
@@ -33,5 +33,8 @@
                 </div>
             </ng-container>
         </div>
+    </div>
+    <div *ngIf="!isOwner" class="image-container">
+        <img  class="waiting-image" src="/assets/images/soleLu gesell abrazo.jpeg" alt="sole lu">
     </div>
 </ng-container>

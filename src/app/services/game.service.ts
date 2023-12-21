@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentData, Firestore, QuerySnapshot, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, limit, onSnapshot, orderBy, query, serverTimestamp, setDoc, startAfter, updateDoc, where, writeBatch } from '@angular/fire/firestore';
+import { DocumentData, Firestore, QuerySnapshot, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getDocsFromCache, increment, limit, onSnapshot, orderBy, query, serverTimestamp, setDoc, startAfter, updateDoc, where, writeBatch } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { collectionNames } from 'src/app/utils/helpers/collection-names';
 import { Game, GameStatus, GameTimeAndStatus, SlidesToPlay } from '../store/create-game/create-game.state';
@@ -162,7 +162,7 @@ export class GameService {
         const isRegister: Answers[] = [];
         querySnapShot.forEach((doc) => {
             isRegister.push(doc.data() as Answers);
-        })
+        });
         return isRegister;
     }
 

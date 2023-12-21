@@ -22,7 +22,7 @@ export class JoinGameComponent extends DestroyableComponent implements OnInit{
     ) {
       super();
     this.joinGameForm = this.fb.group({
-      gameId: ['', [Validators.required, Validators.minLength(8)]],
+      gameId: ['FkOQOfXNFSStEbh9qS0O', [Validators.required, Validators.minLength(8)]],
     });
   }
 

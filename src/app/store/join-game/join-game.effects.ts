@@ -46,7 +46,7 @@ export class JoinGameEffects {
         this.actions$.pipe(
             ofType(JoinGameActions.initiateUserAnswersSuccess),
             tap(({ gameId }) => {
-                this.router.navigate(['/game', gameId])
+                this.router.navigate(['/game', gameId]);
             }),
         ),
         { dispatch: false }

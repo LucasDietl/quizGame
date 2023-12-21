@@ -1,6 +1,6 @@
 <div class="wrapper container">
-    <h1 class="mat-title">Bienvenidos a SoleLu Wedding Game</h1>
-    <h2 class="mat-subheading">Anotate para pacticipar</h2>
+    <h1 class="mat-title">Bienvenidos a SoleLu Magic Trivia</h1>
+    <h2 class="mat-subheading">Anotate para participar:</h2>
     <form [formGroup]="registrationForm" #formDirective="ngForm" (ngSubmit)="saveUserInfo(formDirective)">
         <mat-form-field>
             <mat-label>Nombre:</mat-label>
@@ -20,7 +20,7 @@
             <mat-error *ngIf="registrationForm.controls['nickName'].invalid">{{getErrorMessage('nickName')}}</mat-error>
         </mat-form-field>
 
-        <button *ngIf="!isLoading" mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Save</button>
+        <button *ngIf="!isLoading" mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Estoy listo</button>
         <div class="center">
             <mat-spinner *ngIf="isLoading"></mat-spinner>
         </div>

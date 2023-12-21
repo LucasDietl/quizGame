@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { from, of } from 'rxjs';
-import { catchError, filter, first, map, mergeMap, switchMap, debounceTime, withLatestFrom } from 'rxjs/operators';
+import { catchError, filter, first, map, mergeMap, switchMap, debounceTime, withLatestFrom, shareReplay } from 'rxjs/operators';
 import { GameService } from 'src/app/services/game.service';
 import { SlidesService } from 'src/app/services/slides.service';
 import { TimeService } from 'src/app/services/time.service';
@@ -54,10 +54,7 @@ export class GameEffects {
                 map((answers) => { 
                     return GameActions.getAllUsersAnswersOnceSuccess({answers});
                 }),
-                catchError((error) => { 
-                    debugger;
-                    console.log(error);
-                    
+                catchError((_) => { 
                     return of(openDialog({ title: 'Error Getting all user answers Once' }))})
             )
         }),
@@ -124,6 +121,7 @@ export class GameEffects {
             ofType(GameActions.getAllUsersAnswers),
             switchMap(({ gameId }) => {
                 return this.gameService.getAllUserAnswersByGameIdCall(gameId).pipe(
+                    shareReplay(1),
                     map((answers) => GameActions.getAllUsersAnswersSuccess({ answers })),
                     catchError((_) => of(openDialog({ title: 'Error getting all user answers' })))
                 );

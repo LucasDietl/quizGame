@@ -18,8 +18,7 @@ export class QrCodeComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.pipe(first()).subscribe(async params => {
       const gameId = params['id'];
-      console.log(gameId)
-      this.generateQRCode(`${this.qrCodeUrl}/${gameId}`);
+      this.generateQRCode(`${this.qrCodeUrl}/joinGame/${gameId}`);
     });
   }
 
