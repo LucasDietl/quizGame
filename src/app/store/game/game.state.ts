@@ -9,6 +9,7 @@ export interface GameState {
     currentSlideId: string;
     status: GameStatus | null;
     timeStamp: number;
+    answerId: string;
 }
 
 export interface Answers {

@@ -146,7 +146,7 @@ export class GameService {
 
     public setUserAnswer(answerId: string, points: number, slideId: string): Promise<void> {
         const answerDocInstance = doc(this.firestore, collectionNames.answers, answerId);
-        return updateDoc(answerDocInstance, { totalPoints: increment(points), previousTotalPoints: increment(points), slideId })
+        return updateDoc(answerDocInstance, { totalPoints: increment(points), previousTotalPoints: increment(points), slideId: slideId })
     }
 
     public async gameIdExists(gameId: string): Promise<{ exists: boolean, game: Game }> {
@@ -204,4 +204,15 @@ export class GameService {
         return answers;
     }
 
+    public async getUserAnswersIdOnce(gameId: string, userId: string): Promise<{answerId: string}> {
+        const answersInstance = collection(this.firestore, collectionNames.answers);
+        const q = query(answersInstance, where('gameId', FireStoreOperators.EQ, gameId), where('userId', FireStoreOperators.EQ, userId));
+        const querySnapShot = await getDocs(q);
+        const answers: {answerId: string}[] = [];
+        querySnapShot.forEach((doc) => {
+            const tempAnswer =  { answerId: doc.id};
+            answers.push(tempAnswer);
+        });
+        return answers[0];
+    }
 }

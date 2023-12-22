@@ -88,8 +88,8 @@ export const selectCurrentUserAnswers = createSelector(
 );
 
 export const selectCurrentUserAnswersId = createSelector(
-  selectCurrentUserAnswers,
-  (answer) => answer?.id ?? ''
+  selectGameState,
+  (state) => state?.answerId
 );
 
 export const selectDisabledAnswers = createSelector(

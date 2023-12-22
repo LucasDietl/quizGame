@@ -9,6 +9,7 @@ export const initialGameState: GameState = {
 	loading: false,
 	slides: [],
 	answers: [],
+	answerId: '',
 	disableAnswers: true,
 	currentSlideId: '',
 	timeStamp: 0,
@@ -42,6 +43,10 @@ export const gameReducer = createReducer(
 	on(GameActions.getAllUsersAnswersOnceSuccess, (state, { answers }) => ({
 		...state,
 		answers: [ ...state.answers, ...answers],
+	})),
+	on(GameActions.getCurrentUserAnswerIdSuccess, (state, { answerId }) => ({
+		...state,
+		answerId
 	})),
 	on(GameActions.removeAllUserAnswers, (state) => ({
 		...state,

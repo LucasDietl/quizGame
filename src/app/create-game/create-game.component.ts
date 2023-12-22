@@ -91,7 +91,7 @@ export class CreateGameComponent extends DestroyableComponent implements OnInit 
         const amount = type === this.slideType.quiz ? 4 : type === this.slideType.aOrB ? 2: 0;
         const options = new Array(amount).fill({ title: '', isCorrect: false});
         newSlide = { ...newSlide,
-          seconds: 15,
+          seconds: 25,
           points: 100,
           imageUrl: '',
           options: options

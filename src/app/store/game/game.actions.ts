@@ -16,9 +16,11 @@ export const setNextSlideIdSuccess = createAction('[Game Slide] Set next slide i
 export const setNextSlideIdFail = createAction('[Game Slide] Set next slide id Fail', props<{ error: any }>());
 
 export const getAllUsersAnswers = createAction('[Game Answer] Get all users answers', props<{gameId: string, ownerId: string}>());
-export const getAllUsersAnswersNotNeeded = createAction('[Game Answer] Get all users answers not needed');
 export const getAllUsersAnswersSuccess = createAction('[Game Answer] Get all users answers Success', props<{answers: Answers[]}>());
 export const getAllUsersAnswersFail = createAction('[Game Answer] Get all users answers Fail', props<{message: string}>());
+export const getCurrentUserAnswerId = createAction('[Game Answer] Get current users answer id', props<{ gameId: string, userId: string}>());
+export const getCurrentUserAnswerIdSuccess = createAction('[Game Answer] Get current users answer id success', props<{ answerId: string }>());
+
 
 export const getAllUsersAnswersOnce = createAction('[Game Answer] Get all users Once answers', props<{gameId: string}>());
 export const getAllUsersAnswersOnceSuccess = createAction('[Game Answer] Get all users Once answers Success', props<{answers: Answers[]}>());

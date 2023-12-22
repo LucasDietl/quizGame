@@ -41,10 +41,24 @@ export class GameEffects {
                 const { ownerId } = game;
                 const gameId = game.id;
                 const owner = ownerId === userId;
-                return owner ? GameActions.getAllUsersAnswers({ gameId, ownerId }) : GameActions.getAllUsersAnswersNotNeeded();
+                return owner ? GameActions.getAllUsersAnswers({ gameId, ownerId }) : GameActions.getCurrentUserAnswerId({ gameId, userId});
             }),
         )
     );
+
+    getCurrentUserAnswerId$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(GameActions.getCurrentUserAnswerId),
+        switchMap(({ gameId, userId }) => {
+            return from(this.gameService.getUserAnswersIdOnce(gameId, userId)).pipe(
+                map(({answerId}) => GameActions.getCurrentUserAnswerIdSuccess({answerId})),
+                catchError((_) => { 
+                    return of(openDialog({ title: 'Error getUserAnswersIdOnce' }))
+                })
+            )
+        }),
+    )
+);
 
     getAllUserAnswersOnce$ = createEffect(() =>
     this.actions$.pipe(
@@ -55,7 +69,8 @@ export class GameEffects {
                     return GameActions.getAllUsersAnswersOnceSuccess({answers});
                 }),
                 catchError((_) => { 
-                    return of(openDialog({ title: 'Error Getting all user answers Once' }))})
+                    return of(openDialog({ title: 'Error Getting all user answers Once' }))
+                })
             )
         }),
     )
