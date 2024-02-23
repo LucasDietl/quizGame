@@ -1,3 +1,4 @@
+<button mat-raised-button color="secondary" type="button"(click)="createNewGame()">Create new</button>
 <ng-container *ngIf="games$ | async as games">
     <ng-container *ngIf="selectedGame as game"> 
         <mat-drawer-container class="example-container">
